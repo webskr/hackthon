@@ -63,35 +63,8 @@ export default function ContactVenue() {
               </div>
             </div>
 
-            {/* Embedded Iframe Container with Floating Open in Maps Button */}
+            {/* Embedded Iframe Container */}
             <div style={{ flex: 1, minHeight: '340px', width: '100%', position: 'relative' }}>
-              {/* Floating 'Open in Maps' Button */}
-              <a
-                href={mapLink}
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{
-                  position: 'absolute',
-                  top: '16px',
-                  right: '16px',
-                  zIndex: 10,
-                  background: '#FFFFFF',
-                  color: '#1A73E8',
-                  padding: '0.5rem 1rem',
-                  borderRadius: '6px',
-                  border: '2px solid black',
-                  boxShadow: '3px 3px 0px black',
-                  fontWeight: 700,
-                  fontSize: '0.9rem',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '0.4rem',
-                  textDecoration: 'none'
-                }}
-              >
-                Open in Maps <ExternalLink size={16} />
-              </a>
-
               <iframe
                 title="GP Arwal Location Map"
                 src="https://maps.google.com/maps?q=Govt.+Polytechnic+Arwal,+Dhamaul+Panchayat,+Bihar+804419&t=&z=15&ie=UTF8&iwloc=&output=embed"
