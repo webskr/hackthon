@@ -1,8 +1,17 @@
 import React, { useState } from 'react';
-import { Mail, Phone, ShieldCheck, GraduationCap, Award } from 'lucide-react';
+import { Mail, Phone, ShieldCheck, GraduationCap, Award, Copy, Check } from 'lucide-react';
 
 export default function Team() {
   const [activeTab, setActiveTab] = useState('all');
+  const [copiedPhone, setCopiedPhone] = useState(null);
+
+  const handleCopyPhone = (phone) => {
+    navigator.clipboard.writeText(phone);
+    setCopiedPhone(phone);
+    setTimeout(() => {
+      setCopiedPhone(null);
+    }, 2000);
+  };
 
   const teachers = [
     {
@@ -278,11 +287,43 @@ export default function Team() {
                 }}
               >
                 {member.phone ? (
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                    <Phone size={14} color="var(--primary-orange)" />
-                    <a href={`tel:${member.phone}`} style={{ fontWeight: 600, color: 'inherit' }}>
-                      {member.phone}
-                    </a>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '0.5rem' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                      <Phone size={14} color="var(--primary-orange)" />
+                      <a href={`tel:${member.phone}`} style={{ fontWeight: 600, color: 'inherit' }}>
+                        {member.phone}
+                      </a>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => handleCopyPhone(member.phone)}
+                      title="Copy phone number"
+                      style={{
+                        background: copiedPhone === member.phone ? '#e6f4ea' : '#f5f5f5',
+                        border: '1.5px solid #333',
+                        borderRadius: '4px',
+                        padding: '2px 6px',
+                        cursor: 'pointer',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '3px',
+                        fontSize: '0.72rem',
+                        fontWeight: 700,
+                        color: copiedPhone === member.phone ? '#137333' : '#333'
+                      }}
+                    >
+                      {copiedPhone === member.phone ? (
+                        <>
+                          <Check size={12} color="#137333" />
+                          <span>Copied</span>
+                        </>
+                      ) : (
+                        <>
+                          <Copy size={12} />
+                          <span>Copy</span>
+                        </>
+                      )}
+                    </button>
                   </div>
                 ) : (
                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#888' }}>

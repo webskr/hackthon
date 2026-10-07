@@ -1,9 +1,18 @@
-import React from 'react';
-import { MapPin, Phone, Mail, Clock, Navigation, ExternalLink, Train, Bus, Car } from 'lucide-react';
+import React, { useState } from 'react';
+import { MapPin, Phone, Mail, Clock, Navigation, ExternalLink, Train, Bus, Car, Copy, Check } from 'lucide-react';
 
 export default function ContactVenue() {
   const mapLink = "https://share.google/PKV3I8W52dbuRt73f";
   const embedMapUrl = "https://maps.google.com/maps?q=Government+Polytechnic+Arwal,+Bihar&t=&z=14&ie=UTF8&iwloc=&output=embed";
+  const [copiedPhone, setCopiedPhone] = useState(null);
+
+  const handleCopyPhone = (phone) => {
+    navigator.clipboard.writeText(phone);
+    setCopiedPhone(phone);
+    setTimeout(() => {
+      setCopiedPhone(null);
+    }, 2000);
+  };
 
   return (
     <section id="contact" className="section-padding" style={{ background: 'var(--accent-yellow)' }}>
@@ -205,12 +214,57 @@ export default function ContactVenue() {
             <Phone size={20} color="var(--primary-orange)" />
             <span>NEED ROUTE ASSISTANCE ON ARRIVAL?</span>
           </div>
-          <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
-            <a href="tel:7766939312" className="neo-badge white" style={{ fontSize: '0.85rem' }}>📞 7766939312</a>
-            <a href="tel:9155261246" className="neo-badge white" style={{ fontSize: '0.85rem' }}>📞 9155261246</a>
-            <a href="tel:9334259841" className="neo-badge white" style={{ fontSize: '0.85rem' }}>📞 9334259841</a>
-            <a href="tel:9122130140" className="neo-badge white" style={{ fontSize: '0.85rem' }}>📞 9122130140</a>
-            <a href="mailto:gpahackathon@gmail.com" className="neo-badge white" style={{ fontSize: '0.85rem' }}>✉️ gpahackathon@gmail.com</a>
+          <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap', alignItems: 'center' }}>
+            {['7766939312', '9155261246', '9334259841', '9122130140'].map((phone) => (
+              <div 
+                key={phone} 
+                className="neo-badge white" 
+                style={{ 
+                  fontSize: '0.85rem', 
+                  display: 'flex', 
+                  alignItems: 'center', 
+                  gap: '0.4rem',
+                  padding: '0.35rem 0.6rem' 
+                }}
+              >
+                <a href={`tel:${phone}`} style={{ color: 'inherit', textDecoration: 'none', fontWeight: 700 }}>
+                  📞 {phone}
+                </a>
+                <button
+                  type="button"
+                  onClick={() => handleCopyPhone(phone)}
+                  title="Copy number"
+                  style={{
+                    background: copiedPhone === phone ? '#e6f4ea' : '#eee',
+                    border: '1px solid #333',
+                    borderRadius: '3px',
+                    padding: '2px 4px',
+                    cursor: 'pointer',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '2px',
+                    fontSize: '0.7rem',
+                    fontWeight: 700,
+                    color: copiedPhone === phone ? '#137333' : '#333'
+                  }}
+                >
+                  {copiedPhone === phone ? (
+                    <>
+                      <Check size={10} color="#137333" />
+                      <span>Copied</span>
+                    </>
+                  ) : (
+                    <>
+                      <Copy size={10} />
+                      <span>Copy</span>
+                    </>
+                  )}
+                </button>
+              </div>
+            ))}
+            <a href="mailto:gpahackathon@gmail.com" className="neo-badge white" style={{ fontSize: '0.85rem', padding: '0.35rem 0.6rem' }}>
+              ✉️ gpahackathon@gmail.com
+            </a>
           </div>
         </div>
 
