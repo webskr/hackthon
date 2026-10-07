@@ -4,7 +4,7 @@ export default function Rules() {
   const [openRule, setOpenRule] = useState(null);
   const toggleRule = (index) => setOpenRule(openRule === index ? null : index);
   const rules = [
-    { q: 'Team & Eligibility', a: 'Teams must have 2–4 members.' },
+    { q: 'Team & Eligibility', a: 'Teams must have 2–6 members.' },
     { q: 'College ID Verification', a: 'Participants must carry valid institutional identification.' },
     { q: 'Original Work', a: 'Plagiarism and copied projects are prohibited.' },
     { q: 'Pre-Hackathon Prototype Policy', a: 'No completely finished production-ready projects.' },

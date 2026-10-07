@@ -8,14 +8,14 @@ export default function Hero() {
       <div className="container hero-content">
         <div className="hero-left">
           <div className="hero-badges">
-            <span className="neo-badge white">📍 GOVERNMENT POLYTECHNIC BARH, BIHAR</span>
-            <span className="neo-badge white">⚡ ORGANISED BY GP BARH IT CLUB</span>
+            <span className="neo-badge white">📍 GOVERNMENT POLYTECHNIC ARWAL, BIHAR</span>
+            <span className="neo-badge white">⚡ ORGANISED BY GP ARWAL IT CLUB</span>
             <span className="neo-badge red">🔥 LIVE</span>
           </div>
-          <h1 className="hero-title">TECHNOVA</h1>
+          <h1 className="hero-title">INNOVEX</h1>
           <h2 className="hero-subtitle">— HACKATHON 2026 —</h2>
           <p className="hero-desc">
-            Join the biggest innovation festival at Government Polytechnic Barh. 
+            Join the biggest innovation festival at Government Polytechnic Arwal. 
             Bring your ideas, build game-changing prototypes, solve real-world problems, 
             and compete for exciting prizes and mentorship.
           </p>
@@ -30,8 +30,8 @@ export default function Hero() {
         </div>
         <div className="hero-right">
           <div className="neo-card hero-card">
-            <h3 style={{ fontSize: '2rem' }}>15 OCTOBER — 16 OCTOBER 2026</h3>
-            <h4 style={{ fontSize: '1.5rem', marginBottom: '2rem' }}>2 DAYS PROGRAM</h4>
+            <h3 style={{ fontSize: '2rem' }}>14 OCTOBER — 15 OCTOBER 2026</h3>
+            <h4 style={{ fontSize: '1.5rem', marginBottom: '2rem' }}>24 HOURS PROGRAM</h4>
             <div style={{ background: 'var(--text-color)', color: 'var(--accent-yellow)', padding: '1rem', border: '2px solid #000', borderRadius: '4px', marginBottom: '1rem' }}>
               <h5 style={{ margin: 0, fontSize: '1.25rem' }}>ACCOMMODATION WILL BE PROVIDED</h5>
             </div>
@@ -39,12 +39,12 @@ export default function Hero() {
               Without fooding facility. If you want fooding, a minimal charge of ₹30–₹40 will be charged per meal.
             </p>
             <div style={{ marginTop: '3rem', borderTop: '2px solid rgba(0,0,0,0.2)', paddingTop: '1.5rem' }}>
-              <h5 style={{ color: 'var(--white)' }}>REGISTRATION IS OPEN</h5>
+              <h5 style={{ color: 'var(--text-color)' }}>REGISTRATION CLOSES: 10 OCTOBER (05:00 PM)</h5>
               <div className="countdown">
-                <div className="countdown-block"><span>12</span><small>DAYS</small></div>
-                <div className="countdown-block"><span>08</span><small>HOURS</small></div>
-                <div className="countdown-block"><span>45</span><small>MINS</small></div>
-                <div className="countdown-block"><span>30</span><small>SECS</small></div>
+                <div className="countdown-block"><span>10</span><small>OCTOBER</small></div>
+                <div className="countdown-block"><span>05</span><small>5:00 PM</small></div>
+                <div className="countdown-block"><span>00</span><small>MINS</small></div>
+                <div className="countdown-block"><span>00</span><small>SECS</small></div>
               </div>
             </div>
           </div>

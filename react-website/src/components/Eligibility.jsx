@@ -8,7 +8,7 @@ export default function Eligibility() {
         <h2 className="section-title">WHO CAN PARTICIPATE?</h2>
         <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', marginTop: '2rem' }}>
           <div className="neo-card" style={{ padding: '1rem', display: 'flex', alignItems: 'center', gap: '1rem' }}>
-            <Users color="var(--primary-orange)" /> <strong>2–4 Members</strong>
+            <Users color="var(--primary-orange)" /> <strong>2–6 Members</strong>
           </div>
           <div className="neo-card" style={{ padding: '1rem', display: 'flex', alignItems: 'center', gap: '1rem' }}>
             <CheckCircle color="var(--primary-orange)" /> <strong>Diploma / B.Tech / BCA / MCA Students</strong>

@@ -19,7 +19,7 @@ export default function Navbar() {
   return (
     <>
       <div className="announcement-bar">
-        Government Polytechnic Barh, Bihar • Organised by GP Barh IT Club • Registration Status: CLOSED
+        Government Polytechnic Arwal, Bihar • Organised by GP Arwal IT Club • Registration Status: CLOSED
       </div>
       <nav className="navbar">
         <div className="container">
@@ -61,14 +61,14 @@ export default function Hero() {
       <div className="container hero-content">
         <div className="hero-left">
           <div className="hero-badges">
-            <span className="neo-badge white">📍 GOVERNMENT POLYTECHNIC BARH, BIHAR</span>
-            <span className="neo-badge white">⚡ ORGANISED BY GP BARH IT CLUB</span>
+            <span className="neo-badge white">📍 Government Polytechnic Arwal, BIHAR</span>
+            <span className="neo-badge white">⚡ ORGANISED BY GP Arwal IT CLUB</span>
             <span className="neo-badge red">🔥 LIVE</span>
           </div>
           <h1 className="hero-title">TECHNOVA</h1>
           <h2 className="hero-subtitle">— HACKATHON 2026 —</h2>
           <p className="hero-desc">
-            Join the biggest innovation festival at Government Polytechnic Barh. 
+            Join the biggest innovation festival at Government Polytechnic Arwal. 
             Bring your ideas, build game-changing prototypes, solve real-world problems, 
             and compete for exciting prizes and mentorship.
           </p>
@@ -116,7 +116,7 @@ export default function Competitions() {
     <section id="competitions" className="section-padding" style={{ background: 'var(--text-color)', color: 'var(--white)' }}>
       <div className="container">
         <h2 className="section-title">TECHNOVA 2026<br/>COMPETITIONS</h2>
-        <p className="section-subtitle" style={{ color: '#aaa' }}>Explore the featured competitive events organized by GP Barh IT Club.</p>
+        <p className="section-subtitle" style={{ color: '#aaa' }}>Explore the featured competitive events organized by GP Arwal IT Club.</p>
         <div className="grid-4">
           <div className="neo-card comp-card" style={{ color: 'var(--text-color)' }}>
             <div>
@@ -127,7 +127,7 @@ export default function Competitions() {
             <div className="info">
               <span style={{ display: 'flex', gap: '0.5rem' }}><Users size={18}/> 2–4 Members</span>
               <span style={{ display: 'flex', gap: '0.5rem' }}><Calendar size={18}/> 15 October 2026</span>
-              <span style={{ display: 'flex', gap: '0.5rem' }}><MapPin size={18}/> Main Auditorium, GP Barh</span>
+              <span style={{ display: 'flex', gap: '0.5rem' }}><MapPin size={18}/> Main Auditorium, GP Arwal</span>
             </div>
             <button className="neo-btn neo-btn-outline" style={{ width: '100%' }}>VIEW DETAILS →</button>
           </div>
@@ -139,7 +139,7 @@ export default function Competitions() {
             <div className="info">
               <span style={{ display: 'flex', gap: '0.5rem' }}><Code size={18}/> 1–2 / 2–4 Members</span>
               <span style={{ display: 'flex', gap: '0.5rem' }}><Calendar size={18}/> 15 October 2026</span>
-              <span style={{ display: 'flex', gap: '0.5rem' }}><MapPin size={18}/> GP Barh</span>
+              <span style={{ display: 'flex', gap: '0.5rem' }}><MapPin size={18}/> GP Arwal</span>
             </div>
             <button className="neo-btn neo-btn-outline" style={{ width: '100%' }}>VIEW DETAILS →</button>
           </div>
@@ -151,7 +151,7 @@ export default function Competitions() {
             <div className="info">
               <span style={{ display: 'flex', gap: '0.5rem' }}><Users size={18}/> 2–4 Members</span>
               <span style={{ display: 'flex', gap: '0.5rem' }}><Calendar size={18}/> 15 October 2026</span>
-              <span style={{ display: 'flex', gap: '0.5rem' }}><MapPin size={18}/> Robotics Arena, GP Barh</span>
+              <span style={{ display: 'flex', gap: '0.5rem' }}><MapPin size={18}/> Robotics Arena, GP Arwal</span>
             </div>
             <button className="neo-btn neo-btn-outline" style={{ width: '100%' }}>VIEW DETAILS →</button>
           </div>
@@ -163,7 +163,7 @@ export default function Competitions() {
             <div className="info">
               <span style={{ display: 'flex', gap: '0.5rem' }}><Users size={18}/> 2–4 Members</span>
               <span style={{ display: 'flex', gap: '0.5rem' }}><Calendar size={18}/> 15 October 2026</span>
-              <span style={{ display: 'flex', gap: '0.5rem' }}><MapPin size={18}/> Robotics Arena, GP Barh</span>
+              <span style={{ display: 'flex', gap: '0.5rem' }}><MapPin size={18}/> Robotics Arena, GP Arwal</span>
             </div>
             <button className="neo-btn neo-btn-outline" style={{ width: '100%' }}>VIEW DETAILS →</button>
           </div>
@@ -183,12 +183,12 @@ export default function About() {
         <h2 className="section-title">ABOUT TECHNOVA 2026</h2>
         <p className="section-subtitle">Igniting Technological Innovation in Bihar</p>
         <div style={{ maxWidth: '800px', fontSize: '1.25rem', marginBottom: '4rem', fontWeight: 500 }}>
-          <p style={{ marginBottom: '1rem' }}>TECHNOVA 2026 is the flagship Idea Hackathon presented by the GP Barh IT Club at Government Polytechnic Barh, Bihar.</p>
+          <p style={{ marginBottom: '1rem' }}>TECHNOVA 2026 is the flagship Idea Hackathon presented by the GP Arwal IT Club at Government Polytechnic Arwal, Bihar.</p>
           <p>The mission is to empower student innovators, developers and visionaries to tackle societal and technological challenges through collaborative problem-solving, rapid prototyping and technical mentoring.</p>
         </div>
         <div className="grid-3">
           <div className="neo-card">
-            <h3 style={{ color: 'var(--primary-orange)' }}>GP Barh IT Club</h3>
+            <h3 style={{ color: 'var(--primary-orange)' }}>GP Arwal IT Club</h3>
             <p>Student-led technology community focused on peer learning, hackathons, open-source initiatives and real-world technology incubation.</p>
           </div>
           <div className="neo-card">
@@ -236,7 +236,7 @@ export default function Schedule() {
           <div className="neo-card step-card" style={{ color: 'var(--text-color)', background: 'var(--accent-yellow)' }}>
             <span className="neo-badge white" style={{ marginBottom: '1rem' }}>15–16 Oct 2026</span>
             <h3>Grand Finale</h3>
-            <p>On-campus grand finale at Government Polytechnic Barh with live evaluations.</p>
+            <p>On-campus grand finale at Government Polytechnic Arwal with live evaluations.</p>
             <div className="step-number">04</div>
           </div>
         </div>
@@ -456,7 +456,7 @@ export default function Team() {
     <section className="section-padding">
       <div className="container">
         <h2 className="section-title">LEADERSHIP & COORDINATORS</h2>
-        <p className="section-subtitle">Faculty mentors and GP Barh IT Club student coordinators behind TECHNOVA 2026.</p>
+        <p className="section-subtitle">Faculty mentors and GP Arwal IT Club student coordinators behind TECHNOVA 2026.</p>
         <div className="grid-4" style={{ marginBottom: '2rem' }}>
           <div className="neo-card text-center" style={{ textAlign: 'center' }}>
             <h3>Faculty / Patron</h3>
@@ -533,9 +533,9 @@ export default function ContactVenue() {
         <div className="grid-3" style={{ marginTop: '3rem' }}>
           <div className="neo-card">
             <MapPin size={32} color="var(--primary-orange)" style={{ marginBottom: '1rem' }} />
-            <h3>Government Polytechnic Barh</h3>
+            <h3>Government Polytechnic Arwal</h3>
             <p style={{ fontWeight: 600, marginBottom: '2rem' }}>
-              Government Polytechnic Barh Campus, NH-31, Barh, Patna, Bihar — 803213
+              Government Polytechnic Arwal Campus, NH-31, Barh, Patna, Bihar — 803213
             </p>
             <div style={{ padding: '1rem', background: 'var(--bg-color)', border: '2px solid black', borderRadius: '4px' }}>
               <h4 style={{ margin: 0 }}>TECHNOVA 2026 Grand Finale</h4>
@@ -543,7 +543,7 @@ export default function ContactVenue() {
             </div>
           </div>
           <div className="neo-card">
-            <h3 style={{ marginBottom: '1rem' }}>HOW TO REACH GP BARH</h3>
+            <h3 style={{ marginBottom: '1rem' }}>HOW TO REACH GP Arwal</h3>
             <div style={{ background: '#eee', height: '150px', border: '2px solid black', marginBottom: '1rem', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold' }}>
               Interactive Map Placeholder
             </div>
@@ -588,7 +588,7 @@ export default function FinalCTA() {
       <div className="container">
         <h2 className="section-title">READY TO IGNITE YOUR IDEAS?</h2>
         <p className="section-subtitle" style={{ margin: '0 auto 3rem auto' }}>
-          Form your team, explore the challenge domains and showcase your innovation at Government Polytechnic Barh.
+          Form your team, explore the challenge domains and showcase your innovation at Government Polytechnic Arwal.
         </p>
         <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
           <a href="#competitions" className="neo-btn neo-btn-primary">EXPLORE COMPETITIONS →</a>
@@ -616,8 +616,8 @@ export default function Footer() {
               <Zap fill="var(--primary-orange)" color="var(--primary-orange)" />
               TECHNOVA 2026
             </div>
-            <p style={{ fontWeight: 600 }}>Government Polytechnic Barh, Bihar</p>
-            <p style={{ color: '#aaa' }}>Organised by GP Barh IT Club</p>
+            <p style={{ fontWeight: 600 }}>Government Polytechnic Arwal, Bihar</p>
+            <p style={{ color: '#aaa' }}>Organised by GP Arwal IT Club</p>
           </div>
           <div>
             <h4 style={{ marginBottom: '1rem', color: 'var(--accent-yellow)' }}>Quick Navigation</h4>
@@ -638,8 +638,8 @@ export default function Footer() {
           </div>
         </div>
         <div className="footer-bottom">
-          <p>© 2026 TECHNOVA 2026. Government Polytechnic Barh, Bihar. All rights reserved.</p>
-          <p style={{ marginTop: '0.5rem', fontWeight: 600 }}>Powered by GP Barh IT Club</p>
+          <p>© 2026 TECHNOVA 2026. Government Polytechnic Arwal, Bihar. All rights reserved.</p>
+          <p style={{ marginTop: '0.5rem', fontWeight: 600 }}>Powered by GP Arwal IT Club</p>
         </div>
       </div>
     </footer>

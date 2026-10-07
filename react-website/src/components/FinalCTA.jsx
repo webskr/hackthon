@@ -7,7 +7,7 @@ export default function FinalCTA() {
       <div className="container">
         <h2 className="section-title">READY TO IGNITE YOUR IDEAS?</h2>
         <p className="section-subtitle" style={{ margin: '0 auto 3rem auto' }}>
-          Form your team, explore the challenge domains and showcase your innovation at Government Polytechnic Barh.
+          Form your team, explore the challenge domains and showcase your innovation at Government Polytechnic Arwal.
         </p>
         <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
           <Link to="/register" className="neo-btn neo-btn-primary">REGISTER NOW ↗</Link>

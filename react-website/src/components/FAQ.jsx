@@ -5,12 +5,12 @@ export default function FAQ() {
   const toggleFaq = (index) => setOpenFaq(openFaq === index ? null : index);
   const faqs = [
     { q: 'Who is eligible to participate?', a: 'Bonafide Diploma, Polytechnic, B.Tech and BCA/MCA students.' },
-    { q: 'What is the required team size?', a: 'Teams must consist of 2 to 4 members.' },
+    { q: 'What is the required team size?', a: 'Teams must consist of 2 to 6 members.' },
     { q: 'Is there any registration fee?', a: 'No, registration is completely free.' },
     { q: 'Can we work on an already completed project?', a: 'No completely finished production-ready projects are allowed.' },
     { q: 'Are AI tools like ChatGPT or GitHub Copilot allowed?', a: 'Yes, but participants must understand and explain their code to the judges.' },
     { q: 'Will internet and hardware resources be provided?', a: 'Participants should bring their own laptops and chargers, internet may be provided but keep a backup.' },
-    { q: 'What are the important dates?', a: 'Registration closes on 7 October 2026, and the finale is on 15-16 October.' },
+    { q: 'What are the important dates?', a: 'Registration closes on 10 October 2026 (5:00 PM), and the finale is on 14-15 October 2026.' },
     { q: 'How can I contact the coordinators?', a: 'You can use the contact numbers or email listed in the contact section below.' }
   ];
 

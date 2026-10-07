@@ -9,10 +9,10 @@ export default function Footer() {
           <div>
             <div className="nav-brand" style={{ color: 'white', marginBottom: '1rem' }}>
               <Zap fill="var(--primary-orange)" color="var(--primary-orange)" />
-              TECHNOVA 2026
+              INNOVEX 2026
             </div>
-            <p style={{ fontWeight: 600 }}>Government Polytechnic Barh, Bihar</p>
-            <p style={{ color: '#aaa' }}>Organised by GP Barh IT Club</p>
+            <p style={{ fontWeight: 600 }}>Government Polytechnic Arwal, Bihar</p>
+            <p style={{ color: '#aaa' }}>Organised by GP Arwal IT Club</p>
           </div>
           <div>
             <h4 style={{ marginBottom: '1rem', color: 'var(--accent-yellow)' }}>Quick Navigation</h4>
@@ -28,13 +28,13 @@ export default function Footer() {
             <h4 style={{ marginBottom: '1rem', color: 'var(--accent-yellow)' }}>Administration & Contact</h4>
             <ul style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
               <li><a href="#">Admin Portal</a></li>
-              <li><a href="mailto:gpbhackathon@gmail.com">gpbhackathon@gmail.com</a></li>
+              <li><a href="mailto:gpahackathon@gmail.com">gpahackathon@gmail.com</a></li>
             </ul>
           </div>
         </div>
         <div className="footer-bottom">
-          <p>© 2026 TECHNOVA 2026. Government Polytechnic Barh, Bihar. All rights reserved.</p>
-          <p style={{ marginTop: '0.5rem', fontWeight: 600 }}>Powered by GP Barh IT Club</p>
+          <p>© 2026 INNOVEX 2026. Government Polytechnic Arwal, Bihar. All rights reserved.</p>
+          <p style={{ marginTop: '0.5rem', fontWeight: 600 }}>Powered by GP Arwal IT Club</p>
         </div>
       </div>
     </footer>
