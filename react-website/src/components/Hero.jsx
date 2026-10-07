@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { ArrowDownRight, ArrowRight } from 'lucide-react';
 
 export default function Hero() {
@@ -19,10 +20,10 @@ export default function Hero() {
             and compete for exciting prizes and mentorship.
           </p>
           <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
-            <a href="#competitions" className="neo-btn neo-btn-primary">
-              EXPLORE COMPETITIONS <ArrowDownRight size={20} />
-            </a>
-            <a href="#domains" className="neo-btn neo-btn-outline">
+            <Link to="/register" className="neo-btn neo-btn-primary">
+              REGISTER NOW <ArrowDownRight size={20} />
+            </Link>
+            <a href="/#domains" className="neo-btn neo-btn-outline">
               EXPLORE 14 DOMAINS <ArrowRight size={20} />
             </a>
           </div>
@@ -38,12 +39,12 @@ export default function Hero() {
               Without fooding facility. If you want fooding, a minimal charge of ₹30–₹40 will be charged per meal.
             </p>
             <div style={{ marginTop: '3rem', borderTop: '2px solid rgba(0,0,0,0.2)', paddingTop: '1.5rem' }}>
-              <h5 style={{ color: 'var(--text-color)' }}>REGISTRATION CLOSED</h5>
+              <h5 style={{ color: 'var(--white)' }}>REGISTRATION IS OPEN</h5>
               <div className="countdown">
-                <div className="countdown-block"><span>00</span><small>DAYS</small></div>
-                <div className="countdown-block"><span>00</span><small>HOURS</small></div>
-                <div className="countdown-block"><span>00</span><small>MINS</small></div>
-                <div className="countdown-block"><span>00</span><small>SECS</small></div>
+                <div className="countdown-block"><span>12</span><small>DAYS</small></div>
+                <div className="countdown-block"><span>08</span><small>HOURS</small></div>
+                <div className="countdown-block"><span>45</span><small>MINS</small></div>
+                <div className="countdown-block"><span>30</span><small>SECS</small></div>
               </div>
             </div>
           </div>

@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 export default function FinalCTA() {
   return (
@@ -9,11 +10,11 @@ export default function FinalCTA() {
           Form your team, explore the challenge domains and showcase your innovation at Government Polytechnic Barh.
         </p>
         <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
-          <a href="#competitions" className="neo-btn neo-btn-primary">EXPLORE COMPETITIONS →</a>
-          <a href="#domains" className="neo-btn neo-btn-outline">VIEW DOMAINS →</a>
+          <Link to="/register" className="neo-btn neo-btn-primary">REGISTER NOW ↗</Link>
+          <a href="/#domains" className="neo-btn neo-btn-outline">VIEW DOMAINS →</a>
         </div>
         <div style={{ marginTop: '2rem' }}>
-          <span className="neo-badge red" style={{ fontSize: '1rem', padding: '0.5rem 1rem' }}>REGISTRATION IS CLOSED</span>
+          <span className="neo-badge teal" style={{ fontSize: '1rem', padding: '0.5rem 1rem' }}>REGISTRATION IS OPEN</span>
         </div>
       </div>
     </section>
