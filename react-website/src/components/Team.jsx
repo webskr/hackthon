@@ -63,7 +63,7 @@ export default function Team() {
       dept: "ECE / 2024",
       type: "STUDENT",
       phone: "7766939312",
-      avatar: "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&w=400&q=80"
+      avatar: "/shubham.jpeg"
     },
     {
       name: "Aditya Kumar",
@@ -87,7 +87,7 @@ export default function Team() {
       dept: "CE / 2024",
       type: "STUDENT",
       phone: "9334259841",
-      avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80"
+      avatar: "/vishal.jpg"
     },
     {
       name: "Rounak kumar",
@@ -95,7 +95,7 @@ export default function Team() {
       dept: "ME / 2024",
       type: "STUDENT",
       phone: "9122130140",
-      avatar: "https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?auto=format&fit=crop&w=400&q=80"
+      avatar: "/Rounak.jpg"
     }
   ];
 
