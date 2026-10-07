@@ -138,28 +138,26 @@ export default function Admin() {
                   placeholder="••••••••" 
                   value={password} 
                   onChange={(e) => setPassword(e.target.value)} 
+                  className="password-input"
                   style={{ ...inputStyle, paddingRight: '2.75rem' }} 
                 />
-                <button
-                  type="button"
+                <span
                   onClick={() => setShowPassword(!showPassword)}
                   title={showPassword ? "Hide password" : "Show password"}
                   style={{
                     position: 'absolute',
-                    right: '10px',
-                    background: 'none',
-                    border: 'none',
+                    right: '12px',
                     cursor: 'pointer',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    padding: '4px',
                     color: 'var(--text-color)',
-                    outline: 'none'
+                    userSelect: 'none',
+                    zIndex: 2
                   }}
                 >
-                  {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
-                </button>
+                  {showPassword ? <EyeOff size={20} strokeWidth={2.2} /> : <Eye size={20} strokeWidth={2.2} />}
+                </span>
               </div>
             </div>
             <button 
