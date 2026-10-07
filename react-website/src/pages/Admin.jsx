@@ -76,47 +76,79 @@ export default function Admin() {
 
   if (!isAuthenticated) {
     return (
-      <div className="app-container" style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--bg-color)' }}>
-        <div className="neo-card" style={{ maxWidth: '400px', width: '100%', background: 'var(--white)' }}>
+      <div className="app-container" style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--bg-color)', padding: '1.5rem' }}>
+        <div className="neo-card" style={{ maxWidth: '440px', width: '100%', background: 'var(--white)', padding: '2.5rem 2rem' }}>
           <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
-            <Lock fill="var(--status-red)" color="var(--status-red)" size={48} style={{ margin: '0 auto 1rem' }} />
-            <h2 className="section-title">ADMIN PANEL</h2>
-            <p className="section-subtitle">Login to access registrations</p>
+            <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '1.25rem' }}>
+              <img 
+                src="/gp arwal.jpg" 
+                alt="GP Arwal Official Logo" 
+                style={{ 
+                  width: '95px', 
+                  height: '95px', 
+                  borderRadius: '50%', 
+                  border: '3px solid var(--border-color)', 
+                  boxShadow: '4px 4px 0px var(--border-color)',
+                  objectFit: 'cover',
+                  background: '#FFF'
+                }} 
+              />
+            </div>
+            <span 
+              className="neo-badge red" 
+              style={{ 
+                marginBottom: '0.75rem', 
+                display: 'inline-block',
+                padding: '0.35rem 1rem',
+                fontSize: '0.8rem',
+                letterSpacing: '0.5px'
+              }}
+            >
+              AUTHORIZED ACCESS
+            </span>
+            <h2 className="section-title" style={{ fontSize: '2rem', marginBottom: '0.25rem' }}>ADMIN PANEL</h2>
+            <p className="section-subtitle" style={{ margin: '0 auto', fontSize: '0.95rem' }}>Government Polytechnic Arwal</p>
           </div>
           
           {loginError && (
-            <div style={{ background: 'var(--status-red)', color: 'white', padding: '1rem', borderRadius: '4px', marginBottom: '1.5rem', fontSize: '0.9rem', fontWeight: 600 }}>
+            <div style={{ background: 'var(--status-red)', color: 'white', padding: '0.85rem', borderRadius: '4px', marginBottom: '1.5rem', fontSize: '0.9rem', fontWeight: 600, border: '2px solid black' }}>
               {loginError}
             </div>
           )}
 
-          <form onSubmit={handleLogin} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-            <input 
-              required 
-              type="email" 
-              placeholder="Admin Email" 
-              value={email} 
-              onChange={(e) => setEmail(e.target.value)} 
-              className="neo-input" 
-            />
-            <input 
-              required 
-              type="password" 
-              placeholder="Password" 
-              value={password} 
-              onChange={(e) => setPassword(e.target.value)} 
-              className="neo-input" 
-            />
+          <form onSubmit={handleLogin} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
+              <label style={{ fontWeight: 700, fontSize: '0.9rem' }}>Admin Email</label>
+              <input 
+                required 
+                type="email" 
+                placeholder="admin@gparwal.ac.in" 
+                value={email} 
+                onChange={(e) => setEmail(e.target.value)} 
+                style={inputStyle} 
+              />
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
+              <label style={{ fontWeight: 700, fontSize: '0.9rem' }}>Password</label>
+              <input 
+                required 
+                type="password" 
+                placeholder="••••••••" 
+                value={password} 
+                onChange={(e) => setPassword(e.target.value)} 
+                style={inputStyle} 
+              />
+            </div>
             <button 
               type="submit" 
               disabled={isLoggingIn}
               className="neo-btn neo-btn-primary" 
-              style={{ marginTop: '1rem', width: '100%' }}
+              style={{ marginTop: '0.5rem', width: '100%', padding: '0.85rem', fontSize: '1rem' }}
             >
-              {isLoggingIn ? 'AUTHENTICATING...' : 'LOGIN'}
+              {isLoggingIn ? 'AUTHENTICATING...' : 'LOGIN TO DASHBOARD'}
             </button>
           </form>
-          <button onClick={() => navigate('/')} className="neo-btn neo-btn-outline" style={{ width: '100%', marginTop: '1rem' }}>
+          <button onClick={() => navigate('/')} className="neo-btn neo-btn-outline" style={{ width: '100%', marginTop: '1rem', padding: '0.75rem' }}>
             RETURN TO HOME
           </button>
         </div>
@@ -217,4 +249,16 @@ const tdStyle = {
   padding: '1rem',
   fontWeight: 500,
   whiteSpace: 'nowrap',
+};
+
+const inputStyle = {
+  padding: '0.75rem', 
+  border: '3px solid var(--border-color)', 
+  fontFamily: 'var(--font-body)',
+  fontSize: '1rem',
+  borderRadius: '4px',
+  outline: 'none',
+  width: '100%',
+  background: '#FFFFFF',
+  color: 'var(--text-color)'
 };
