@@ -27,7 +27,7 @@ export default function Footer() {
           <div>
             <h4 style={{ marginBottom: '1rem', color: 'var(--accent-yellow)' }}>Administration & Contact</h4>
             <ul style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-              <li><a href="#">Admin Portal</a></li>
+              <li><a href="/admin">Admin Portal</a></li>
               <li><a href="mailto:gpbhackathon@gmail.com">gpbhackathon@gmail.com</a></li>
             </ul>
           </div>

@@ -151,22 +151,34 @@ export default function Admin() {
               <thead>
                 <tr style={{ background: 'var(--secondary-teal)', color: 'white' }}>
                   <th style={thStyle}>Team Name</th>
-                  <th style={thStyle}>Leader Name</th>
-                  <th style={thStyle}>Email ID</th>
-                  <th style={thStyle}>WhatsApp</th>
-                  <th style={thStyle}>Domain</th>
                   <th style={thStyle}>Size</th>
+                  <th style={thStyle}>Leader Name</th>
+                  <th style={thStyle}>Leader Roll No.</th>
+                  <th style={thStyle}>Other Members</th>
+                  <th style={thStyle}>College Name</th>
+                  <th style={thStyle}>Semester</th>
+                  <th style={thStyle}>Branch</th>
+                  <th style={thStyle}>WhatsApp</th>
+                  <th style={thStyle}>Email ID</th>
+                  <th style={thStyle}>Project Title</th>
+                  <th style={thStyle}>Domain</th>
                 </tr>
               </thead>
               <tbody>
                 {registrations.map((reg, i) => (
                   <tr key={reg.id} style={{ borderBottom: '2px solid var(--border-color)', background: i % 2 === 0 ? '#fafafa' : 'white' }}>
                     <td style={tdStyle}><strong>{reg.teamName}</strong></td>
-                    <td style={tdStyle}>{reg.leaderName}</td>
-                    <td style={tdStyle}>{reg.email}</td>
-                    <td style={tdStyle}>{reg.whatsappNumber}</td>
-                    <td style={tdStyle}>{reg.domain}</td>
                     <td style={tdStyle}>{reg.numMembers}</td>
+                    <td style={tdStyle}>{reg.leaderName}</td>
+                    <td style={tdStyle}>{reg.leaderRoll}</td>
+                    <td style={tdStyle}>{(reg.memberNames || []).filter(n => n.trim() !== '').join(', ') || '-'}</td>
+                    <td style={tdStyle}>{reg.collegeName}</td>
+                    <td style={tdStyle}>{reg.semester}</td>
+                    <td style={tdStyle}>{reg.branch}</td>
+                    <td style={tdStyle}>{reg.whatsappNumber}</td>
+                    <td style={tdStyle}>{reg.email}</td>
+                    <td style={tdStyle}>{reg.projectTitle}</td>
+                    <td style={tdStyle}>{reg.domain}</td>
                   </tr>
                 ))}
               </tbody>
@@ -182,9 +194,11 @@ const thStyle = {
   padding: '1rem',
   borderBottom: '3px solid var(--border-color)',
   fontWeight: 800,
+  whiteSpace: 'nowrap',
 };
 
 const tdStyle = {
   padding: '1rem',
   fontWeight: 500,
+  whiteSpace: 'nowrap',
 };
