@@ -154,13 +154,14 @@ export default function Admin() {
                   <th style={thStyle}>Size</th>
                   <th style={thStyle}>Leader Name</th>
                   <th style={thStyle}>Leader Roll No.</th>
-                  <th style={thStyle}>Other Members</th>
+                  <th style={thStyle}>Other Members (Name & Roll)</th>
                   <th style={thStyle}>College Name</th>
                   <th style={thStyle}>Semester</th>
                   <th style={thStyle}>Branch</th>
                   <th style={thStyle}>WhatsApp</th>
                   <th style={thStyle}>Email ID</th>
                   <th style={thStyle}>Project Title</th>
+                  <th style={thStyle}>Project Description</th>
                   <th style={thStyle}>Domain</th>
                 </tr>
               </thead>
@@ -171,13 +172,28 @@ export default function Admin() {
                     <td style={tdStyle}>{reg.numMembers}</td>
                     <td style={tdStyle}>{reg.leaderName}</td>
                     <td style={tdStyle}>{reg.leaderRoll}</td>
-                    <td style={tdStyle}>{(reg.memberNames || []).filter(n => n.trim() !== '').join(', ') || '-'}</td>
+                    <td style={tdStyle}>
+                      {Array.isArray(reg.members) && reg.members.length > 0 ? (
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
+                          {reg.members.map((m, mIdx) => (
+                            <div key={mIdx} style={{ fontSize: '0.85rem' }}>
+                              <strong>{m.name || `Member ${mIdx + 2}`}</strong> {m.roll ? `(${m.roll})` : ''}
+                            </div>
+                          ))}
+                        </div>
+                      ) : (
+                        (reg.memberNames || []).filter(n => n && n.trim() !== '').join(', ') || '-'
+                      )}
+                    </td>
                     <td style={tdStyle}>{reg.collegeName}</td>
                     <td style={tdStyle}>{reg.semester}</td>
                     <td style={tdStyle}>{reg.branch}</td>
                     <td style={tdStyle}>{reg.whatsappNumber}</td>
                     <td style={tdStyle}>{reg.email}</td>
-                    <td style={tdStyle}>{reg.projectTitle}</td>
+                    <td style={tdStyle}><strong>{reg.projectTitle}</strong></td>
+                    <td style={{ ...tdStyle, maxWidth: '280px', whiteSpace: 'normal', fontSize: '0.85rem', lineHeight: '1.4' }}>
+                      {reg.projectDescription || '-'}
+                    </td>
                     <td style={tdStyle}>{reg.domain}</td>
                   </tr>
                 ))}
