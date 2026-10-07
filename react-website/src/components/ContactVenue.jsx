@@ -216,53 +216,39 @@ export default function ContactVenue() {
           </div>
           <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap', alignItems: 'center' }}>
             {['7766939312', '9155261246', '9334259841', '9122130140'].map((phone) => (
-              <div 
+              <a 
                 key={phone} 
+                href={`tel:${phone}`}
                 className="neo-badge white" 
+                title={`Call ${phone}`}
                 style={{ 
                   fontSize: '0.85rem', 
-                  display: 'flex', 
+                  display: 'inline-flex', 
                   alignItems: 'center', 
-                  gap: '0.4rem',
-                  padding: '0.35rem 0.6rem' 
+                  gap: '0.5rem',
+                  padding: '0.4rem 0.8rem',
+                  textDecoration: 'none',
+                  color: 'inherit',
+                  cursor: 'pointer'
                 }}
               >
-                <a href={`tel:${phone}`} style={{ color: 'inherit', textDecoration: 'none', fontWeight: 700 }}>
-                  📞 {phone}
-                </a>
-                <button
-                  type="button"
-                  onClick={() => handleCopyPhone(phone)}
-                  title="Copy number"
+                <span>📞 {phone}</span>
+                <span 
                   style={{
-                    background: copiedPhone === phone ? '#e6f4ea' : '#eee',
-                    border: '1px solid #333',
-                    borderRadius: '3px',
-                    padding: '2px 4px',
-                    cursor: 'pointer',
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: '2px',
-                    fontSize: '0.7rem',
-                    fontWeight: 700,
-                    color: copiedPhone === phone ? '#137333' : '#333'
+                    background: 'var(--primary-orange)',
+                    color: 'white',
+                    padding: '2px 8px',
+                    borderRadius: '4px',
+                    fontSize: '0.72rem',
+                    fontWeight: 800,
+                    letterSpacing: '0.5px'
                   }}
                 >
-                  {copiedPhone === phone ? (
-                    <>
-                      <Check size={10} color="#137333" />
-                      <span>Copied</span>
-                    </>
-                  ) : (
-                    <>
-                      <Copy size={10} />
-                      <span>Copy</span>
-                    </>
-                  )}
-                </button>
-              </div>
+                  CALL
+                </span>
+              </a>
             ))}
-            <a href="mailto:gpahackathon@gmail.com" className="neo-badge white" style={{ fontSize: '0.85rem', padding: '0.35rem 0.6rem' }}>
+            <a href="mailto:gpahackathon@gmail.com" className="neo-badge white" style={{ fontSize: '0.85rem', padding: '0.4rem 0.8rem' }}>
               ✉️ gpahackathon@gmail.com
             </a>
           </div>

@@ -290,40 +290,31 @@ export default function Team() {
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '0.5rem' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                       <Phone size={14} color="var(--primary-orange)" />
-                      <a href={`tel:${member.phone}`} style={{ fontWeight: 600, color: 'inherit' }}>
+                      <a href={`tel:${member.phone}`} style={{ fontWeight: 600, color: 'inherit', textDecoration: 'none' }}>
                         {member.phone}
                       </a>
                     </div>
-                    <button
-                      type="button"
-                      onClick={() => handleCopyPhone(member.phone)}
-                      title="Copy phone number"
+                    <a
+                      href={`tel:${member.phone}`}
+                      title={`Call ${member.name}`}
                       style={{
-                        background: copiedPhone === member.phone ? '#e6f4ea' : '#f5f5f5',
-                        border: '1.5px solid #333',
+                        background: 'var(--primary-orange)',
+                        color: 'white',
+                        border: '1.5px solid #000',
                         borderRadius: '4px',
-                        padding: '2px 6px',
+                        padding: '2px 8px',
                         cursor: 'pointer',
-                        display: 'flex',
+                        display: 'inline-flex',
                         alignItems: 'center',
-                        gap: '3px',
+                        gap: '4px',
                         fontSize: '0.72rem',
-                        fontWeight: 700,
-                        color: copiedPhone === member.phone ? '#137333' : '#333'
+                        fontWeight: 800,
+                        textDecoration: 'none'
                       }}
                     >
-                      {copiedPhone === member.phone ? (
-                        <>
-                          <Check size={12} color="#137333" />
-                          <span>Copied</span>
-                        </>
-                      ) : (
-                        <>
-                          <Copy size={12} />
-                          <span>Copy</span>
-                        </>
-                      )}
-                    </button>
+                      <Phone size={10} />
+                      <span>CALL</span>
+                    </a>
                   </div>
                 ) : (
                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#888' }}>
