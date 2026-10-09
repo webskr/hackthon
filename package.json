@@ -1,0 +1,8 @@
+{
+  "name": "hackathon-root",
+  "private": true,
+  "scripts": {
+    "install": "cd react-website && npm install",
+    "build": "cd react-website && npm run build"
+  }
+}

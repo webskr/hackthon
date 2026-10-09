@@ -1,0 +1,10 @@
+{
+  "buildCommand": "cd react-website && npm install && npm run build",
+  "outputDirectory": "react-website/dist",
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}
