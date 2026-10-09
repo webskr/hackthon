@@ -10,12 +10,15 @@ export default function Register() {
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState('');
 
+  // Check if registration is closed
+  const isClosed = new Date().getTime() > new Date('October 11, 2026 23:59:59').getTime();
+
   const [formData, setFormData] = useState({
     teamName: '',
-    numMembers: '1',
+    numMembers: '2',
     leaderName: '',
     leaderRoll: '',
-    members: [], // Array of { name: '', roll: '' }
+    members: [{ name: '', roll: '' }], // Array of { name: '', roll: '' }
     collegeName: '',
     semester: '1',
     branch: '',
@@ -96,6 +99,24 @@ export default function Register() {
     );
   }
 
+  if (isClosed) {
+    return (
+      <div className="app-container" style={{ background: 'var(--bg-color)', minHeight: '100vh', padding: '2rem 0', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <div className="container" style={{ maxWidth: '600px' }}>
+          <div className="neo-card" style={{ background: 'var(--white)', textAlign: 'center', padding: '3rem 2rem' }}>
+            <h1 style={{ color: 'var(--status-red)', marginBottom: '1rem', fontSize: '2.5rem' }}>REGISTRATION CLOSED</h1>
+            <p style={{ fontSize: '1.1rem', fontWeight: 600, marginBottom: '2rem' }}>
+              We are no longer accepting new registrations for INNOVEXA 2026. Thank you for your overwhelming response!
+            </p>
+            <button onClick={() => navigate('/')} className="neo-btn neo-btn-primary">
+              RETURN TO HOME
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="app-container" style={{ background: 'var(--bg-color)', minHeight: '100vh', padding: '2rem 0' }}>
       <div className="container" style={{ maxWidth: '800px' }}>
@@ -126,8 +147,8 @@ export default function Register() {
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
               <label style={{ fontWeight: 700 }}>2. Number of Team Members (2 - 6) *</label>
               <select required name="numMembers" value={formData.numMembers} onChange={handleNumMembersChange} style={inputStyle}>
-                {[1,2,3,4,5,6].map(num => (
-                  <option key={num} value={num}>{num} {num === 1 ? 'Member (Leader Only)' : 'Members'}</option>
+                {[2,3,4,5,6].map(num => (
+                  <option key={num} value={num}>{num} Members</option>
                 ))}
               </select>
             </div>

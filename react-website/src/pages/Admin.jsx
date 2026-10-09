@@ -197,6 +197,54 @@ export default function Admin() {
     }
   };
 
+  const handleExportCSV = () => {
+    if (registrations.length === 0) {
+      alert('No data to export');
+      return;
+    }
+
+    const headers = [
+      'Status', 'Team Name', 'Size', 'Leader Name', 'Leader Roll No.', 'Other Members', 
+      'College Name', 'Semester', 'Branch', 'WhatsApp', 'Email ID', 'Project Title', 'Domain', 'Project Description'
+    ];
+
+    const csvRows = [headers.join(',')];
+
+    registrations.forEach(reg => {
+      const status = reg.isApproved ? 'APPROVED' : (reg.isViewed ? 'REVIEWED' : 'NEW');
+      const otherMembers = Array.isArray(reg.members) && reg.members.length > 0 
+        ? reg.members.map(m => `${m.name} (${m.roll})`).join('; ')
+        : ((reg.memberNames || []).join('; '));
+        
+      const values = [
+        status,
+        `"${(reg.teamName || '').replace(/"/g, '""')}"`,
+        reg.numMembers,
+        `"${(reg.leaderName || '').replace(/"/g, '""')}"`,
+        `"${(reg.leaderRoll || '').replace(/"/g, '""')}"`,
+        `"${otherMembers.replace(/"/g, '""')}"`,
+        `"${(reg.collegeName || '').replace(/"/g, '""')}"`,
+        reg.semester,
+        `"${(reg.branch || '').replace(/"/g, '""')}"`,
+        `"${(reg.whatsappNumber || '').replace(/"/g, '""')}"`,
+        `"${(reg.email || '').replace(/"/g, '""')}"`,
+        `"${(reg.projectTitle || '').replace(/"/g, '""')}"`,
+        `"${(reg.domain || '').replace(/"/g, '""')}"`,
+        `"${(reg.projectDescription || '').replace(/"/g, '""')}"`
+      ];
+      csvRows.push(values.join(','));
+    });
+
+    const csvContent = "data:text/csv;charset=utf-8," + csvRows.join('\n');
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", "hackathon_registrations.csv");
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   const [activeTab, setActiveTab] = useState('new'); // 'new' | 'reviewed' | 'approved' | 'all'
 
   const newRegistrations = registrations.filter(r => !r.isApproved && !r.isViewed);
@@ -337,6 +385,13 @@ export default function Admin() {
               style={{ background: 'var(--status-red)', color: 'white' }}
             >
               {isDeleting ? 'DELETING...' : `DELETE (${selectedIds.size})`}
+            </button>
+            <button
+              onClick={handleExportCSV}
+              className="neo-btn"
+              style={{ background: 'var(--accent-yellow)', color: 'var(--text-color)' }}
+            >
+              DOWNLOAD CSV
             </button>
             <button
               onClick={() => {
