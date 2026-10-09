@@ -8,6 +8,12 @@
   border-bottom: var(--border-thick);
 }
 
+/* Hide default browser password reveal icon so only single custom eye toggle appears */
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear {
+  display: none !important;
+}
+
 .navbar {
   background: var(--bg-color);
   border-bottom: var(--border-thick);

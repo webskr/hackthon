@@ -13,7 +13,7 @@ export default function Hero() {
             <span className="neo-badge red">🔥 LIVE</span>
           </div>
           <h1 className="hero-title">INNOVEX</h1>
-          <h2 className="hero-subtitle">— HACKATHON 2026 —</h2>
+          <h2 className="hero-subtitle">HACKATHON 2026</h2>
           <p className="hero-desc">
             Join the biggest innovation festival at Government Polytechnic Arwal. 
             Bring your ideas, build game-changing prototypes, solve real-world problems, 

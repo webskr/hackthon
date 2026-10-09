@@ -1,8 +1,17 @@
 import React, { useState } from 'react';
-import { Mail, Phone, ShieldCheck, GraduationCap, Award } from 'lucide-react';
+import { Mail, Phone, ShieldCheck, GraduationCap, Award, Copy, Check } from 'lucide-react';
 
 export default function Team() {
   const [activeTab, setActiveTab] = useState('all');
+  const [copiedPhone, setCopiedPhone] = useState(null);
+
+  const handleCopyPhone = (phone) => {
+    navigator.clipboard.writeText(phone);
+    setCopiedPhone(phone);
+    setTimeout(() => {
+      setCopiedPhone(null);
+    }, 2000);
+  };
 
   const teachers = [
     {
@@ -278,10 +287,33 @@ export default function Team() {
                 }}
               >
                 {member.phone ? (
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                    <Phone size={14} color="var(--primary-orange)" />
-                    <a href={`tel:${member.phone}`} style={{ fontWeight: 600, color: 'inherit' }}>
-                      {member.phone}
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '0.5rem' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                      <Phone size={14} color="var(--primary-orange)" />
+                      <a href={`tel:${member.phone}`} style={{ fontWeight: 600, color: 'inherit', textDecoration: 'none' }}>
+                        {member.phone}
+                      </a>
+                    </div>
+                    <a
+                      href={`tel:${member.phone}`}
+                      title={`Call ${member.name}`}
+                      style={{
+                        background: 'var(--primary-orange)',
+                        color: 'white',
+                        border: '1.5px solid #000',
+                        borderRadius: '4px',
+                        padding: '2px 8px',
+                        cursor: 'pointer',
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '4px',
+                        fontSize: '0.72rem',
+                        fontWeight: 800,
+                        textDecoration: 'none'
+                      }}
+                    >
+                      <Phone size={10} />
+                      <span>CALL</span>
                     </a>
                   </div>
                 ) : (

@@ -15,13 +15,14 @@ export default function Register() {
     numMembers: '1',
     leaderName: '',
     leaderRoll: '',
-    memberNames: [''], // Array for member names
+    members: [], // Array of { name: '', roll: '' }
     collegeName: '',
     semester: '1',
     branch: '',
     whatsappNumber: '',
     email: '',
     projectTitle: '',
+    projectDescription: '',
     domain: 'Agriculture'
   });
 
@@ -38,28 +39,25 @@ export default function Register() {
   const handleNumMembersChange = (e) => {
     const num = parseInt(e.target.value);
     setFormData(prev => {
-      // Adjust the member names array length based on selected number
-      // num includes the leader? The prompt says "Number of Team Members", let's assume it's total members.
-      // So if num = 3, we need 1 leader and 2 members.
       const membersCount = num > 1 ? num - 1 : 0;
-      const newMemberNames = [...prev.memberNames];
+      const newMembers = [...(prev.members || [])];
       
-      while (newMemberNames.length < membersCount) {
-        newMemberNames.push('');
+      while (newMembers.length < membersCount) {
+        newMembers.push({ name: '', roll: '' });
       }
       return { 
         ...prev, 
         numMembers: e.target.value,
-        memberNames: newMemberNames.slice(0, membersCount)
+        members: newMembers.slice(0, membersCount)
       };
     });
   };
 
-  const handleMemberNameChange = (index, value) => {
+  const handleMemberChange = (index, field, value) => {
     setFormData(prev => {
-      const newNames = [...prev.memberNames];
-      newNames[index] = value;
-      return { ...prev, memberNames: newNames };
+      const newMembers = [...(prev.members || [])];
+      newMembers[index] = { ...newMembers[index], [field]: value };
+      return { ...prev, members: newMembers };
     });
   };
 
@@ -72,6 +70,7 @@ export default function Register() {
       // Add a new document with email as id.
       await setDoc(doc(db, "registrations", formData.email), {
         ...formData,
+        memberNames: (formData.members || []).map(m => m.name),
         timestamp: serverTimestamp()
       });
       setSuccess(true);
@@ -88,7 +87,7 @@ export default function Register() {
       <div className="app-container" style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <div className="neo-card text-center" style={{ maxWidth: '500px' }}>
           <h2 style={{ color: 'var(--secondary-teal)' }}>REGISTRATION SUCCESSFUL! 🎉</h2>
-          <p style={{ margin: '2rem 0', fontWeight: 600 }}>Your team has been successfully registered for TECHNOVA 2026. We will contact you soon via Email and WhatsApp.</p>
+          <p style={{ margin: '2rem 0', fontWeight: 600 }}>Your team has been successfully registered for INNOVEX 2026. We will contact you soon via Email and WhatsApp.</p>
           <button onClick={() => navigate('/')} className="neo-btn neo-btn-primary">
             RETURN TO HOME
           </button>
@@ -108,7 +107,7 @@ export default function Register() {
           <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
             <Zap fill="var(--primary-orange)" color="var(--primary-orange)" size={48} style={{ margin: '0 auto 1rem' }} />
             <h1 className="section-title" style={{ fontSize: '2.5rem' }}>TEAM REGISTRATION</h1>
-            <p className="section-subtitle" style={{ margin: '0 auto' }}>TECHNOVA 2026 Hackathon</p>
+            <p className="section-subtitle" style={{ margin: '0 auto' }}>INNOVEX 2026 Hackathon</p>
           </div>
 
           {error && (
@@ -125,10 +124,10 @@ export default function Register() {
             </div>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-              <label style={{ fontWeight: 700 }}>2. Number of Team Members *</label>
+              <label style={{ fontWeight: 700 }}>2. Number of Team Members (2 - 6) *</label>
               <select required name="numMembers" value={formData.numMembers} onChange={handleNumMembersChange} style={inputStyle}>
                 {[1,2,3,4,5,6].map(num => (
-                  <option key={num} value={num}>{num}</option>
+                  <option key={num} value={num}>{num} {num === 1 ? 'Member (Leader Only)' : 'Members'}</option>
                 ))}
               </select>
             </div>
@@ -144,16 +143,35 @@ export default function Register() {
               </div>
             </div>
 
-            {formData.memberNames.map((name, index) => (
-              <div key={index} style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', background: '#f5f5f5', padding: '1rem', borderRadius: '4px', border: '1px solid #ddd' }}>
-                <label style={{ fontWeight: 700 }}>5. Team Member {index + 2} Name *</label>
-                <input 
-                  required 
-                  type="text" 
-                  value={name} 
-                  onChange={(e) => handleMemberNameChange(index, e.target.value)} 
-                  style={inputStyle} 
-                />
+            {formData.members && formData.members.map((member, index) => (
+              <div key={index} style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem', background: '#f9f9f9', padding: '1.25rem', borderRadius: '4px', border: '2px solid var(--border-color)' }}>
+                <h4 style={{ margin: 0, fontWeight: 800, color: 'var(--primary-orange)', fontSize: '1rem' }}>
+                  Team Member {index + 2} Information
+                </h4>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
+                    <label style={{ fontWeight: 700, fontSize: '0.9rem' }}>Member {index + 2} Name *</label>
+                    <input 
+                      required 
+                      type="text" 
+                      placeholder={`Full Name`}
+                      value={member.name} 
+                      onChange={(e) => handleMemberChange(index, 'name', e.target.value)} 
+                      style={inputStyle} 
+                    />
+                  </div>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
+                    <label style={{ fontWeight: 700, fontSize: '0.9rem' }}>Member {index + 2} Registration / Roll No. *</label>
+                    <input 
+                      required 
+                      type="text" 
+                      placeholder={`Roll / Registration No.`}
+                      value={member.roll} 
+                      onChange={(e) => handleMemberChange(index, 'roll', e.target.value)} 
+                      style={inputStyle} 
+                    />
+                  </div>
+                </div>
               </div>
             ))}
 
@@ -197,7 +215,26 @@ export default function Register() {
             </div>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-              <label style={{ fontWeight: 700 }}>12. Domain / Sector *</label>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <label style={{ fontWeight: 700 }}>12. Description of your Project *</label>
+                <span style={{ fontSize: '0.85rem', color: formData.projectDescription.length >= 250 ? 'var(--status-red)' : '#666', fontWeight: 600 }}>
+                  {formData.projectDescription.length} / 250 characters
+                </span>
+              </div>
+              <textarea 
+                required 
+                name="projectDescription" 
+                maxLength={250}
+                rows={4}
+                placeholder="Briefly describe your project idea, problem solved and solution (max 250 characters)..."
+                value={formData.projectDescription} 
+                onChange={handleInputChange} 
+                style={{ ...inputStyle, resize: 'vertical' }} 
+              />
+            </div>
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+              <label style={{ fontWeight: 700 }}>13. Domain / Sector *</label>
               <select required name="domain" value={formData.domain} onChange={handleInputChange} style={inputStyle}>
                 {domains.map(dom => (
                   <option key={dom} value={dom}>{dom}</option>
