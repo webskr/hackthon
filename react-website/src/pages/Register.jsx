@@ -87,7 +87,7 @@ export default function Register() {
       <div className="app-container" style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <div className="neo-card text-center" style={{ maxWidth: '500px' }}>
           <h2 style={{ color: 'var(--secondary-teal)' }}>REGISTRATION SUCCESSFUL! 🎉</h2>
-          <p style={{ margin: '2rem 0', fontWeight: 600 }}>Your team has been successfully registered for INNOVEX 2026. We will contact you soon via Email and WhatsApp.</p>
+          <p style={{ margin: '2rem 0', fontWeight: 600 }}>Your team has been successfully registered for INNOVEXA 2026. We will contact you soon via Email and WhatsApp.</p>
           <button onClick={() => navigate('/')} className="neo-btn neo-btn-primary">
             RETURN TO HOME
           </button>
@@ -107,7 +107,7 @@ export default function Register() {
           <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
             <Zap fill="var(--primary-orange)" color="var(--primary-orange)" size={48} style={{ margin: '0 auto 1rem' }} />
             <h1 className="section-title" style={{ fontSize: '2.5rem' }}>TEAM REGISTRATION</h1>
-            <p className="section-subtitle" style={{ margin: '0 auto' }}>INNOVEX 2026 Hackathon</p>
+            <p className="section-subtitle" style={{ margin: '0 auto' }}>INNOVEXA 2026 Hackathon</p>
           </div>
 
           {error && (
@@ -132,7 +132,7 @@ export default function Register() {
               </select>
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
+            <div className="form-row">
               <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
                 <label style={{ fontWeight: 700 }}>3. Team Leader Name *</label>
                 <input required type="text" name="leaderName" value={formData.leaderName} onChange={handleInputChange} style={inputStyle} />
@@ -148,7 +148,7 @@ export default function Register() {
                 <h4 style={{ margin: 0, fontWeight: 800, color: 'var(--primary-orange)', fontSize: '1rem' }}>
                   Team Member {index + 2} Information
                 </h4>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                <div className="form-row" style={{ gap: '1rem' }}>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
                     <label style={{ fontWeight: 700, fontSize: '0.9rem' }}>Member {index + 2} Name *</label>
                     <input 
@@ -181,7 +181,7 @@ export default function Register() {
               <input required type="text" name="collegeName" value={formData.collegeName} onChange={handleInputChange} style={inputStyle} />
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
+            <div className="form-row">
               <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
                 <label style={{ fontWeight: 700 }}>7. Semester *</label>
                 <select required name="semester" value={formData.semester} onChange={handleInputChange} style={inputStyle}>
@@ -197,7 +197,7 @@ export default function Register() {
             </div>
 
             {/* Contact Info */}
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
+            <div className="form-row">
               <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
                 <label style={{ fontWeight: 700 }}>9. Team Leader WhatsApp Number *</label>
                 <input required type="tel" name="whatsappNumber" value={formData.whatsappNumber} onChange={handleInputChange} style={inputStyle} />
@@ -258,6 +258,8 @@ export default function Register() {
 }
 
 const inputStyle = {
+  width: '100%',
+  boxSizing: 'border-box',
   padding: '0.75rem', 
   border: '3px solid var(--border-color)', 
   fontFamily: 'var(--font-body)',

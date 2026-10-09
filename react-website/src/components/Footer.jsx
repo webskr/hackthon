@@ -9,10 +9,9 @@ export default function Footer() {
           <div>
             <div className="nav-brand" style={{ color: 'white', marginBottom: '1rem' }}>
               <Zap fill="var(--primary-orange)" color="var(--primary-orange)" />
-              INNOVEX 2026
+              INNOVEXA 2026
             </div>
             <p style={{ fontWeight: 600 }}>Government Polytechnic Arwal, Bihar</p>
-            <p style={{ color: '#aaa' }}>Organised by GP Arwal IT Club</p>
           </div>
           <div>
             <h4 style={{ marginBottom: '1rem', color: 'var(--accent-yellow)' }}>Quick Navigation</h4>
@@ -33,8 +32,8 @@ export default function Footer() {
           </div>
         </div>
         <div className="footer-bottom">
-          <p>© 2026 INNOVEX 2026. Government Polytechnic Arwal, Bihar. All rights reserved.</p>
-          <p style={{ marginTop: '0.5rem', fontWeight: 600 }}>Powered by GP Arwal IT Club</p>
+          <p>© 2026 INNOVEXA 2026. Government Polytechnic Arwal, Bihar. All rights reserved.</p>
+          <p style={{ marginTop: '0.5rem', fontWeight: 600 }}>Powered by <a href="https://webskr.in" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--primary-orange)', textDecoration: 'none' }}>webskr.in</a></p>
         </div>
       </div>
     </footer>

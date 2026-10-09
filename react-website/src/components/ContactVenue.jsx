@@ -31,7 +31,7 @@ export default function ContactVenue() {
           </span>
           <h2 className="section-title">VENUE & HOW TO REACH</h2>
           <p className="section-subtitle" style={{ color: 'var(--text-color)', fontWeight: 600 }}>
-            Find your way to Government Polytechnic Arwal for INNOVEX 2026 Grand Finale.
+            Find your way to Government Polytechnic Arwal for INNOVEXA 2026 Grand Finale.
           </p>
         </div>
 
@@ -133,7 +133,7 @@ export default function ContactVenue() {
                 </div>
                 <div>
                   <h4 style={{ margin: 0, fontSize: '1.1rem', fontWeight: 800 }}>Official Venue Address</h4>
-                  <p style={{ margin: 0, fontSize: '0.85rem', color: '#666', fontWeight: 600 }}>INNOVEX 2026 Grand Finale</p>
+                  <p style={{ margin: 0, fontSize: '0.85rem', color: '#666', fontWeight: 600 }}>INNOVEXA 2026 Grand Finale</p>
                 </div>
               </div>
 
@@ -158,7 +158,7 @@ export default function ContactVenue() {
                 <div>
                   <div style={{ fontWeight: 800, fontSize: '0.85rem' }}>Hackathon Day Schedule:</div>
                   <div style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--status-red)' }}>
-                    Reporting begins at 08:30 AM on 14 Oct 2026
+                    Reporting begins at 09:00 AM on 14 Oct 2026
                   </div>
                 </div>
               </div>
@@ -215,7 +215,7 @@ export default function ContactVenue() {
             <span>NEED ROUTE ASSISTANCE ON ARRIVAL?</span>
           </div>
           <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap', alignItems: 'center' }}>
-            {['7766939312', '9155261246', '9334259841', '9122130140'].map((phone) => (
+            {['9155261246', '9334259841', '9122130140'].map((phone) => (
               <a 
                 key={phone} 
                 href={`tel:${phone}`}
@@ -262,28 +262,28 @@ export default function ContactVenue() {
               Send us a message and our organizing team will get back to you promptly.
             </p>
             <form style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.85rem' }}>
+              <div className="inquiry-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.85rem' }}>
                 <input 
                   type="text" 
                   placeholder="Full Name" 
-                  style={{ padding: '0.75rem', border: '2px solid black', borderRadius: '4px', fontFamily: 'var(--font-body)', fontWeight: 500 }} 
+                  style={{ width: '100%', padding: '0.75rem', border: '2px solid black', borderRadius: '4px', fontFamily: 'var(--font-body)', fontWeight: 500 }} 
                 />
                 <input 
                   type="email" 
                   placeholder="Email Address" 
-                  style={{ padding: '0.75rem', border: '2px solid black', borderRadius: '4px', fontFamily: 'var(--font-body)', fontWeight: 500 }} 
+                  style={{ width: '100%', padding: '0.75rem', border: '2px solid black', borderRadius: '4px', fontFamily: 'var(--font-body)', fontWeight: 500 }} 
                 />
               </div>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.85rem' }}>
+              <div className="inquiry-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.85rem' }}>
                 <input 
                   type="text" 
                   placeholder="Phone Number" 
-                  style={{ padding: '0.75rem', border: '2px solid black', borderRadius: '4px', fontFamily: 'var(--font-body)', fontWeight: 500 }} 
+                  style={{ width: '100%', padding: '0.75rem', border: '2px solid black', borderRadius: '4px', fontFamily: 'var(--font-body)', fontWeight: 500 }} 
                 />
                 <input 
                   type="text" 
                   placeholder="College / Institution" 
-                  style={{ padding: '0.75rem', border: '2px solid black', borderRadius: '4px', fontFamily: 'var(--font-body)', fontWeight: 500 }} 
+                  style={{ width: '100%', padding: '0.75rem', border: '2px solid black', borderRadius: '4px', fontFamily: 'var(--font-body)', fontWeight: 500 }} 
                 />
               </div>
               <input 

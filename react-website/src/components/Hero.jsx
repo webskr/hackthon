@@ -12,7 +12,7 @@ export default function Hero() {
             <span className="neo-badge white">⚡ ORGANISED BY GP ARWAL IT CLUB</span>
             <span className="neo-badge red">🔥 LIVE</span>
           </div>
-          <h1 className="hero-title">INNOVEX</h1>
+          <h1 className="hero-title">INNOVEXA</h1>
           <h2 className="hero-subtitle">HACKATHON 2026</h2>
           <p className="hero-desc">
             Join the biggest innovation festival at Government Polytechnic Arwal. 
@@ -32,12 +32,6 @@ export default function Hero() {
           <div className="neo-card hero-card">
             <h3 style={{ fontSize: '2rem' }}>14 OCTOBER — 15 OCTOBER 2026</h3>
             <h4 style={{ fontSize: '1.5rem', marginBottom: '2rem' }}>24 HOURS PROGRAM</h4>
-            <div style={{ background: 'var(--text-color)', color: 'var(--accent-yellow)', padding: '1rem', border: '2px solid #000', borderRadius: '4px', marginBottom: '1rem' }}>
-              <h5 style={{ margin: 0, fontSize: '1.25rem' }}>ACCOMMODATION WILL BE PROVIDED</h5>
-            </div>
-            <p style={{ fontWeight: 600 }}>
-              Without fooding facility. If you want fooding, a minimal charge of ₹30–₹40 will be charged per meal.
-            </p>
             <div style={{ marginTop: '3rem', borderTop: '2px solid rgba(0,0,0,0.2)', paddingTop: '1.5rem' }}>
               <h5 style={{ color: 'var(--text-color)' }}>REGISTRATION CLOSES: 10 OCTOBER (05:00 PM)</h5>
               <div className="countdown">

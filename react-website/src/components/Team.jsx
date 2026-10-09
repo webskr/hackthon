@@ -19,49 +19,87 @@ export default function Team() {
       role: "Principal",
       dept: "Patron / Principal",
       type: "PRINCIPAL",
-      avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80"
+      avatar: "/Abhijeet sir.jpg"
     },
     {
       name: "Archana Kumari",
       role: "Faculty Coordinator",
       dept: "Faculty / Mentor",
       type: "TEACHER",
-      avatar: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=400&q=80"
+      avatar: "/Archana.jpg"
     },
     {
       name: "Ravikant Kumar",
       role: "Faculty Coordinator",
       dept: "Faculty / Mentor",
       type: "TEACHER",
-      avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=400&q=80"
+      avatar: "/Ravikant sir.jpg"
     },
     {
       name: "Abhishek Pankaj",
       role: "Faculty Coordinator",
       dept: "Faculty / Mentor",
       type: "TEACHER",
-      avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=400&q=80"
+      avatar: "/Abhishek sir.jpg"
     },
     {
-      name: "Gaurav kumar",
+      name: "Gaurav Kishore",
       role: "Faculty Coordinator",
       dept: "Faculty / Mentor",
-      type: "TEACHER",
-      avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=400&q=80"
+      type: "HOD",
+      avatar: "/gaurav.jpg"
     },
     {
-      name: "Ajeet kumar",
+      name: "Ajeet Prasad Singh",
       role: "Faculty Coordinator",
       dept: "Faculty / Mentor",
-      type: "TEACHER",
-      avatar: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=400&q=80"
+      type: "HOD",
+      avatar: "/ajeet sir.jpg"
     },
     {
       name: "Vikash kumar",
       role: "Faculty Coordinator",
       dept: "Faculty / Mentor",
       type: "TEACHER",
-      avatar: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=400&q=80"
+      avatar: "/vikash.jpg"
+    }
+  ];
+
+  const hods = [
+    {
+      name: "Prof. Ajeet Prasad Singh",
+      role: "HOD (EE)",
+      dept: "Head of Department / EE",
+      type: "HOD",
+      avatar: "/ajeet sir.jpg"
+    },
+    {
+      name: "Prof. Saket Kumar",
+      role: "HOD (CSE)",
+      dept: "Head of Department / CSE",
+      type: "HOD",
+      avatar: "/saket sir copy.jpg"
+    },
+    {
+      name: "Prof. Gaurav Kishore",
+      role: "HOD (ECE)",
+      dept: "Head of Department / ECE",
+      type: "HOD",
+      avatar: "/gaurav.jpg"
+    },
+    {
+      name: "Prof. Chandan Kumar",
+      role: "HOD (CE)",
+      dept: "Head of Department / CE",
+      type: "HOD",
+      avatar: "/Chandan kumar.jpg"
+    },
+    {
+      name: "Prof. Atul Kumar",
+      role: "HOD (ME)",
+      dept: "Head of Department / ME",
+      type: "HOD",
+      avatar: "/Atul sir.jpg"
     }
   ];
 
@@ -72,7 +110,23 @@ export default function Team() {
       dept: "ECE / 2024",
       type: "STUDENT",
       phone: "7766939312",
-      avatar: "/shubham.jpeg"
+      avatar: "/shubham copy.jpeg"
+    },
+    {
+      name: "Devkrishn Kumar",
+      role: "Student Coordinator",
+      dept: "ECE / 2024",
+      type: "STUDENT",
+      phone: "8544685036",
+      avatar: "/Devkrishn.jpg"
+    },
+    {
+      name: "Balajee",
+      role: "Student Coordinator",
+      dept: "ECE / 2024",
+      type: "STUDENT",
+      phone: "9661185337",
+      avatar: "/balajee.jpg"
     },
     {
       name: "Aditya Kumar",
@@ -80,15 +134,15 @@ export default function Team() {
       dept: "CSE / 2024",
       type: "STUDENT",
       phone: "9155261246",
-      avatar: "https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=400&q=80"
+      avatar: "/aditya.jpg"
     },
     {
-      name: "Dheeraj Kumar",
+      name: "Dhiraj Kumar",
       role: "Student Coordinator",
       dept: "EE / 2024",
       type: "STUDENT",
-      phone: "7484941556",
-      avatar: "https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?auto=format&fit=crop&w=400&q=80"
+      phone: "6207058665",
+      avatar: "/dhiraj.jpg"
     },
     {
       name: "Vishal Kumar",
@@ -110,11 +164,13 @@ export default function Team() {
 
   const allMembers = [
     ...teachers,
+    ...hods,
     ...students
   ];
 
   const displayedMembers = 
     activeTab === 'teachers' ? teachers :
+    activeTab === 'hods' ? hods :
     activeTab === 'students' ? students :
     allMembers;
 
@@ -138,7 +194,7 @@ export default function Team() {
             LEADERSHIP & COORDINATORS
           </h2>
           <p className="section-subtitle" style={{ margin: '0 auto', maxWidth: '750px' }}>
-            Meet the faculty mentors and GP Arwal IT Club student coordinators behind INNOVEX 2026.
+            Meet the faculty mentors and GP Arwal IT Club student coordinators behind INNOVEXA 2026.
           </p>
 
           {/* Filter Tabs */}
@@ -158,6 +214,20 @@ export default function Team() {
               ALL MEMBERS ({allMembers.length})
             </button>
             <button
+              onClick={() => setActiveTab('hods')}
+              className="neo-btn"
+              style={{
+                background: activeTab === 'hods' ? 'var(--text-color)' : 'var(--white)',
+                color: activeTab === 'hods' ? 'var(--white)' : 'var(--text-color)',
+                borderColor: 'var(--text-color)',
+                padding: '0.6rem 1.4rem',
+                fontSize: '0.9rem',
+                cursor: 'pointer'
+              }}
+            >
+              HODs ({hods.length})
+            </button>
+            <button
               onClick={() => setActiveTab('teachers')}
               className="neo-btn"
               style={{
@@ -169,7 +239,7 @@ export default function Team() {
                 cursor: 'pointer'
               }}
             >
-              TEACHERS COORDINATORS ({teachers.length})
+              FACULTY COORDINATORS ({teachers.length})
             </button>
             <button
               onClick={() => setActiveTab('students')}
@@ -214,12 +284,12 @@ export default function Team() {
                 {/* Header Badge & Icon */}
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem' }}>
                   <span 
-                    className={`neo-badge ${member.type === 'PRINCIPAL' ? 'red' : member.type === 'TEACHER' ? 'teal' : 'yellow'}`}
+                    className={`neo-badge ${member.type === 'PRINCIPAL' || member.type === 'HOD' ? 'red' : member.type === 'TEACHER' ? 'teal' : 'yellow'}`}
                     style={{ fontSize: '0.75rem', padding: '0.25rem 0.6rem', fontWeight: 800 }}
                   >
                     {member.type}
                   </span>
-                  {member.type === 'PRINCIPAL' ? (
+                  {member.type === 'PRINCIPAL' || member.type === 'HOD' ? (
                     <Award size={20} color="var(--primary-orange)" />
                   ) : member.type === 'TEACHER' ? (
                     <ShieldCheck size={20} color="var(--secondary-teal)" />

@@ -19,7 +19,7 @@ export default function Competitions() {
             FLAGSHIP EVENT
           </span>
           <h2 className="section-title" style={{ color: 'var(--white)', fontSize: 'clamp(2rem, 4vw, 3rem)' }}>
-            INNOVEX 2026<br/>IDEA HACKATHON
+            INNOVEXA 2026<br/>IDEA HACKATHON
           </h2>
           <p className="section-subtitle" style={{ color: '#bbb', margin: '0 auto', maxWidth: '750px' }}>
             The premier innovation marathon organized by GP Arwal IT Club where student thinkers collaborate to formulate disruptive solutions for real-world challenges.

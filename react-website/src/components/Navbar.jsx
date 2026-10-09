@@ -14,7 +14,7 @@ export default function Navbar() {
         <div className="container">
           <div className="nav-brand">
             <Zap fill="var(--primary-orange)" color="var(--primary-orange)" />
-            INNOVEX 2026
+            INNOVEXA 2026
             <span className="label">HACKATHON</span>
           </div>
           <div className="nav-links">

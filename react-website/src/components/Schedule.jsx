@@ -5,7 +5,7 @@ export default function Schedule() {
     <section id="schedule" className="section-padding" style={{ background: 'var(--secondary-teal)', color: 'white' }}>
       <div className="container">
         <h2 className="section-title">HACKATHON JOURNEY</h2>
-        <p className="section-subtitle" style={{ color: '#eee' }}>Mark your calendar for every important milestone of INNOVEX 2026.</p>
+        <p className="section-subtitle" style={{ color: '#eee' }}>Mark your calendar for every important milestone of INNOVEXA 2026.</p>
         <div className="grid-4">
           <div className="neo-card step-card" style={{ color: 'var(--text-color)' }}>
             <span className="neo-badge teal" style={{ marginBottom: '1rem' }}>8 Oct 2026</span>
