@@ -1,4 +1,4 @@
-const apiKey = "re_7QCQPU1M_BMKSeTdg7cP5nm91vJoGzVYR";
+const apiKey = "YOUR_API_KEY_HERE";
 fetch('https://api.resend.com/emails', {
   method: 'POST',
   headers: {
