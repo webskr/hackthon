@@ -11,7 +11,7 @@ export default function Register() {
   const [error, setError] = useState('');
 
   // Check if registration is closed
-  const isClosed = new Date().getTime() > new Date('October 11, 2026 23:59:59').getTime();
+  const isClosed = true;
 
   const [formData, setFormData] = useState({
     teamName: '',
