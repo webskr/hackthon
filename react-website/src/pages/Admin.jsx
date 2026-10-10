@@ -219,6 +219,42 @@ export default function Admin() {
     }
   };
 
+  const handleSendMail = async (reg) => {
+    if (!window.confirm(`Are you sure you want to manually send an approval email to ${reg.email}?`)) {
+      return;
+    }
+    
+    try {
+      const emailResponse = await fetch('/api/send-email', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          to: [reg.email],
+          subject: 'TECHNOVA 2026 Hackathon Organize By GP Arwal - Registration Approved! 🎉',
+          html: `
+            <h2>Congratulations ${reg.leaderName}!</h2>
+            <p>Your team <strong>${reg.teamName}</strong> has been officially APPROVED for the TECHNOVA 2026 Hackathon.</p>
+            <p>We are excited to see your innovation in the ${reg.domain} domain.</p>
+            <br/>
+            <p>If you have any query than visit our site <a href="https://gparwal.webskr.in" target="_blank" rel="noopener noreferrer">gparwal.webskr.in</a> and contact co-ordinator.</p>
+            <br/>
+            <p>Regards,<br/>GP Arwal</p>
+          `
+        })
+      });
+
+      if (!emailResponse.ok) {
+        throw new Error("Failed to send email");
+      }
+      alert(`Email sent successfully to ${reg.email}!`);
+    } catch (error) {
+      console.error("Email send error: ", error);
+      alert("Failed to send email. Check API or proxy settings.");
+    }
+  };
+
   const handleDelete = async () => {
     if (selectedIds.size === 0) return;
 
@@ -590,14 +626,24 @@ export default function Admin() {
                           {reg.isViewed ? 'Viewed' : 'Review ↗'}
                         </button>
                         {reg.isApproved && (
-                          <button
-                            onClick={() => handleSingleUnapprove(reg)}
-                            className="neo-btn"
-                            style={{ padding: '0.35rem 0.6rem', fontSize: '0.75rem', background: 'var(--primary-orange)', color: 'white' }}
-                            title="Disapprove / Move back to review"
-                          >
-                            ↩ Unapprove
-                          </button>
+                          <div style={{ display: 'flex', gap: '0.35rem' }}>
+                            <button
+                              onClick={() => handleSendMail(reg)}
+                              className="neo-btn"
+                              style={{ padding: '0.35rem 0.6rem', fontSize: '0.75rem', background: '#4CAF50', color: 'white' }}
+                              title="Send Email manually"
+                            >
+                              ✉ SEND MAIL
+                            </button>
+                            <button
+                              onClick={() => handleSingleUnapprove(reg)}
+                              className="neo-btn"
+                              style={{ padding: '0.35rem 0.6rem', fontSize: '0.75rem', background: 'var(--primary-orange)', color: 'white' }}
+                              title="Disapprove / Move back to review"
+                            >
+                              ↩ Unapprove
+                            </button>
+                          </div>
                         )}
                       </div>
                     </td>
