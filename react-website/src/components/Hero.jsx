@@ -3,33 +3,41 @@ import { Link } from 'react-router-dom';
 import { ArrowDownRight, ArrowRight } from 'lucide-react';
 
 export default function Hero() {
-  const [timeLeft, setTimeLeft] = useState({ days: '00', hours: '00', minutes: '00', seconds: '00' });
+  const [timeLeft, setTimeLeft] = useState({
+    days: '00',
+    hours: '00',
+    minutes: '00',
+    seconds: '00'
+  });
 
   useEffect(() => {
-    const targetDate = new Date('October 10, 2026 23:59:59').getTime();
+    // Target: 10 October 2026, 23:59:59 (Midnight)
+    const targetDate = new Date('2026-10-10T23:59:59').getTime();
 
-    const interval = setInterval(() => {
+    const updateTimer = () => {
       const now = new Date().getTime();
-      const distance = targetDate - now;
+      const difference = targetDate - now;
 
-      if (distance < 0) {
-        clearInterval(interval);
+      if (difference <= 0) {
         setTimeLeft({ days: '00', hours: '00', minutes: '00', seconds: '00' });
         return;
       }
 
-      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+      const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((difference % (1000 * 60)) / 1000);
 
       setTimeLeft({
-        days: days.toString().padStart(2, '0'),
-        hours: hours.toString().padStart(2, '0'),
-        minutes: minutes.toString().padStart(2, '0'),
-        seconds: seconds.toString().padStart(2, '0')
+        days: String(days).padStart(2, '0'),
+        hours: String(hours).padStart(2, '0'),
+        minutes: String(minutes).padStart(2, '0'),
+        seconds: String(seconds).padStart(2, '0')
       });
-    }, 1000);
+    };
+
+    updateTimer();
+    const interval = setInterval(updateTimer, 1000);
 
     return () => clearInterval(interval);
   }, []);
@@ -46,8 +54,8 @@ export default function Hero() {
           <h1 className="hero-title">INNOVEXA</h1>
           <h2 className="hero-subtitle">HACKATHON 2026</h2>
           <p className="hero-desc">
-            Join the biggest innovation festival at Government Polytechnic Arwal.
-            Bring your ideas, build game-changing prototypes, solve real-world problems,
+            Join the biggest innovation festival at Government Polytechnic Arwal. 
+            Bring your ideas, build game-changing prototypes, solve real-world problems, 
             and compete for exciting prizes and mentorship.
           </p>
           <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
@@ -64,7 +72,7 @@ export default function Hero() {
             <h3 style={{ fontSize: '2rem' }}>14 OCTOBER — 15 OCTOBER 2026</h3>
             <h4 style={{ fontSize: '1.5rem', marginBottom: '2rem' }}>24 HOURS PROGRAM</h4>
             <div style={{ marginTop: '3rem', borderTop: '2px solid rgba(0,0,0,0.2)', paddingTop: '1.5rem' }}>
-              <h5 style={{ color: 'var(--text-color)' }}>REGISTRATION CLOSES: 10 OCTOBER (12:00 MIDNIGHT)</h5>
+              <h5 style={{ color: 'var(--text-color)' }}>REGISTRATION CLOSES: 10 OCTOBER (11:59 PM)</h5>
               <div className="countdown">
                 <div className="countdown-block"><span>{timeLeft.days}</span><small>DAYS</small></div>
                 <div className="countdown-block"><span>{timeLeft.hours}</span><small>HOURS</small></div>

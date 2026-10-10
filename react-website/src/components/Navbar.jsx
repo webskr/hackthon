@@ -8,7 +8,7 @@ export default function Navbar() {
   return (
     <>
       <div className="announcement-bar">
-        Government Polytechnic Arwal, Bihar • Organised by GP Arwal IT Club • Registration Closes: 10 October (5:00 PM)
+        Government Polytechnic Arwal, Bihar • Organised by GP Arwal IT Club • Registration Closes: 10 October (11:59 PM)
       </div>
       <nav className="navbar">
         <div className="container">
