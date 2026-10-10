@@ -24,42 +24,42 @@ export default function Team() {
     {
       name: "Archana Kumari",
       role: "Faculty Coordinator",
-      dept: "Faculty / Mentor",
+      dept: "Professor",
       type: "TEACHER",
       avatar: "/Archana.jpg"
     },
     {
       name: "Ravikant Kumar",
       role: "Faculty Coordinator",
-      dept: "Faculty / Mentor",
+      dept: "Professor",
       type: "TEACHER",
       avatar: "/Ravikant sir.jpg"
     },
     {
-      name: "Abhishek Pankaj",
-      role: "Faculty Coordinator",
-      dept: "Faculty / Mentor",
-      type: "TEACHER",
-      avatar: "/Abhishek sir.jpg"
-    },
-    {
-      name: "Gaurav Kishore",
-      role: "Faculty Coordinator",
-      dept: "Faculty / Mentor",
-      type: "HOD",
-      avatar: "/gaurav.jpg"
-    },
-    {
       name: "Ajeet Prasad Singh",
       role: "Faculty Coordinator",
-      dept: "Faculty / Mentor",
+      dept: "Professor",
       type: "HOD",
       avatar: "/ajeet sir.jpg"
     },
     {
+      name: "Gaurav Kishore",
+      role: "Faculty Coordinator",
+      dept: "Professor",
+      type: "HOD",
+      avatar: "/gaurav.jpg"
+    },
+    {
+      name: "Abhishek Pankaj",
+      role: "Faculty Coordinator",
+      dept: "Professor",
+      type: "TEACHER",
+      avatar: "/Abhishek sir.jpg"
+    },
+    {
       name: "Vikash kumar",
       role: "Faculty Coordinator",
-      dept: "Faculty / Mentor",
+      dept: "Professor",
       type: "TEACHER",
       avatar: "/vikash.jpg"
     }
@@ -389,7 +389,7 @@ export default function Team() {
                 ) : (
                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#888' }}>
                     <ShieldCheck size={14} color="var(--secondary-teal)" />
-                    <span>Faculty Mentor</span>
+                    <span>Professor</span>
                   </div>
                 )}
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
