@@ -20,6 +20,7 @@ export default function Admin() {
   const [loadingRegs, setLoadingRegs] = useState(false);
   const [selectedIds, setSelectedIds] = useState(new Set());
   const [isApproving, setIsApproving] = useState(false);
+  const [isUnapproving, setIsUnapproving] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [selectedRegDetail, setSelectedRegDetail] = useState(null);
 
@@ -171,6 +172,50 @@ export default function Admin() {
       alert("An error occurred while approving. Note: Sending emails directly from browser using Resend might get blocked by CORS. You may need a backend proxy.");
     } finally {
       setIsApproving(false);
+    }
+  };
+
+  const handleUnapprove = async () => {
+    if (selectedIds.size === 0) return;
+
+    if (!window.confirm(`Are you sure you want to unapprove / move ${selectedIds.size} team(s) back to review?`)) {
+      return;
+    }
+
+    setIsUnapproving(true);
+    try {
+      for (let id of selectedIds) {
+        await updateDoc(doc(db, "registrations", id), {
+          isApproved: false,
+          isViewed: true
+        });
+      }
+      alert("Selected team(s) have been unapproved and moved back to Review!");
+      setSelectedIds(new Set());
+      fetchRegistrations();
+    } catch (error) {
+      console.error("Unapprove error: ", error);
+      alert("An error occurred while unapproving.");
+    } finally {
+      setIsUnapproving(false);
+    }
+  };
+
+  const handleSingleUnapprove = async (reg) => {
+    if (!window.confirm(`Move team "${reg.teamName}" back to review?`)) {
+      return;
+    }
+
+    try {
+      await updateDoc(doc(db, "registrations", reg.id), {
+        isApproved: false,
+        isViewed: true
+      });
+      alert(`Team "${reg.teamName}" moved back to Review!`);
+      fetchRegistrations();
+    } catch (error) {
+      console.error("Unapprove error: ", error);
+      alert("An error occurred while unapproving.");
     }
   };
 
@@ -379,6 +424,15 @@ export default function Admin() {
               {isApproving ? 'APPROVING...' : `APPROVE (${selectedIds.size})`}
             </button>
             <button
+              onClick={handleUnapprove}
+              disabled={isUnapproving || selectedIds.size === 0}
+              className="neo-btn"
+              style={{ background: 'var(--primary-orange)', color: 'white' }}
+              title="Move selected teams back to Reviewed"
+            >
+              {isUnapproving ? 'UNAPPROVING...' : `MOVE TO REVIEW (${selectedIds.size})`}
+            </button>
+            <button
               onClick={handleDelete}
               disabled={isDeleting || selectedIds.size === 0}
               className="neo-btn"
@@ -498,19 +552,19 @@ export default function Admin() {
               <tbody>
                 {displayedRegistrations.map((reg, i) => (
                   <tr key={reg.id} style={{ borderBottom: '2px solid var(--border-color)', background: i % 2 === 0 ? '#fafafa' : 'white' }}>
-                    <td style={{ ...tdStyle, textAlign: 'center', minWidth: '120px' }}>
-                      {reg.isApproved ? (
-                        <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.35rem', color: '#008080', fontWeight: 800, fontSize: '0.8rem', background: '#E6F4EA', padding: '0.3rem 0.6rem', borderRadius: '4px', border: '1.5px solid #008080' }}>
-                          <CheckCircle size={16} color="#008080" /> APPROVED
-                        </div>
-                      ) : (
-                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>
-                          <input
-                            type="checkbox"
-                            style={{ width: '20px', height: '20px', cursor: 'pointer' }}
-                            checked={selectedIds.has(reg.id)}
-                            onChange={() => toggleSelection(reg.id)}
-                          />
+                    <td style={{ ...tdStyle, textAlign: 'center', minWidth: '130px' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>
+                        <input
+                          type="checkbox"
+                          style={{ width: '20px', height: '20px', cursor: 'pointer' }}
+                          checked={selectedIds.has(reg.id)}
+                          onChange={() => toggleSelection(reg.id)}
+                        />
+                        {reg.isApproved ? (
+                          <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.25rem', color: '#008080', fontWeight: 800, fontSize: '0.75rem', background: '#E6F4EA', padding: '0.25rem 0.5rem', borderRadius: '4px', border: '1.5px solid #008080' }}>
+                            <CheckCircle size={14} color="#008080" /> APPROVED
+                          </span>
+                        ) : (
                           <span 
                             style={{ 
                               fontSize: '0.75rem', 
@@ -523,17 +577,29 @@ export default function Admin() {
                           >
                             {reg.isViewed ? 'REVIEWED' : 'NEW'}
                           </span>
-                        </div>
-                      )}
+                        )}
+                      </div>
                     </td>
-                    <td style={{ ...tdStyle, textAlign: 'center' }}>
-                      <button 
-                        onClick={() => handleMarkViewed(reg)} 
-                        className="neo-btn" 
-                        style={{ padding: '0.35rem 0.75rem', fontSize: '0.75rem', background: reg.isViewed ? '#F0F0F0' : 'var(--accent-yellow)', color: 'var(--text-color)' }}
-                      >
-                        {reg.isViewed ? 'Viewed' : 'Review ↗'}
-                      </button>
+                    <td style={{ ...tdStyle, textAlign: 'center', minWidth: '150px' }}>
+                      <div style={{ display: 'flex', gap: '0.35rem', justifyContent: 'center', flexWrap: 'wrap' }}>
+                        <button 
+                          onClick={() => handleMarkViewed(reg)} 
+                          className="neo-btn" 
+                          style={{ padding: '0.35rem 0.6rem', fontSize: '0.75rem', background: reg.isViewed ? '#F0F0F0' : 'var(--accent-yellow)', color: 'var(--text-color)' }}
+                        >
+                          {reg.isViewed ? 'Viewed' : 'Review ↗'}
+                        </button>
+                        {reg.isApproved && (
+                          <button
+                            onClick={() => handleSingleUnapprove(reg)}
+                            className="neo-btn"
+                            style={{ padding: '0.35rem 0.6rem', fontSize: '0.75rem', background: 'var(--primary-orange)', color: 'white' }}
+                            title="Disapprove / Move back to review"
+                          >
+                            ↩ Unapprove
+                          </button>
+                        )}
+                      </div>
                     </td>
                     <td style={{ ...tdStyle, minWidth: '150px' }}><strong>{reg.teamName}</strong></td>
                     <td style={{ ...tdStyle, minWidth: '70px', textAlign: 'center' }}>{reg.numMembers}</td>
