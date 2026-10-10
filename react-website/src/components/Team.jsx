@@ -23,14 +23,14 @@ export default function Team() {
     },
     {
       name: "Archana Kumari",
-      role: "Faculty Coordinator",
+      role: "Hackathon Incharge",
       dept: "Professor",
       type: "TEACHER",
       avatar: "/Archana.jpg"
     },
     {
       name: "Ravikant Kumar",
-      role: "Faculty Coordinator",
+      role: "TPO Incharge",
       dept: "Professor",
       type: "TEACHER",
       avatar: "/Ravikant sir.jpg"
