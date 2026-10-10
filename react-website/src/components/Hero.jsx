@@ -6,7 +6,7 @@ export default function Hero() {
   const [timeLeft, setTimeLeft] = useState({ days: '00', hours: '00', minutes: '00', seconds: '00' });
 
   useEffect(() => {
-    const targetDate = new Date('October 10, 2026 12:00:00').getTime();
+    const targetDate = new Date('October 10, 2026 23:59:59').getTime();
 
     const interval = setInterval(() => {
       const now = new Date().getTime();
@@ -64,7 +64,7 @@ export default function Hero() {
             <h3 style={{ fontSize: '2rem' }}>14 OCTOBER — 15 OCTOBER 2026</h3>
             <h4 style={{ fontSize: '1.5rem', marginBottom: '2rem' }}>24 HOURS PROGRAM</h4>
             <div style={{ marginTop: '3rem', borderTop: '2px solid rgba(0,0,0,0.2)', paddingTop: '1.5rem' }}>
-              <h5 style={{ color: 'var(--text-color)' }}>REGISTRATION CLOSES: 10 OCTOBER (12:00 PM)</h5>
+              <h5 style={{ color: 'var(--text-color)' }}>REGISTRATION CLOSES: 10 OCTOBER (12:00 MIDNIGHT)</h5>
               <div className="countdown">
                 <div className="countdown-block"><span>{timeLeft.days}</span><small>DAYS</small></div>
                 <div className="countdown-block"><span>{timeLeft.hours}</span><small>HOURS</small></div>
