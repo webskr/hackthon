@@ -8,7 +8,7 @@ export default function Navbar() {
   return (
     <>
       <div className="announcement-bar">
-        Government Polytechnic Arwal, Bihar • Organised by GP Arwal IT Club • Registration Closes: 10 October (11:59 PM)
+        Government Polytechnic Arwal, Bihar • Organised by GP Arwal IT Club • Last Date for Submission of PPT & Prototype: 13 October (11:59 PM)
       </div>
       <nav className="navbar">
         <div className="container">
@@ -24,10 +24,7 @@ export default function Navbar() {
             <a href="/#domains">Domains</a>
             <a href="/#team">Team</a>
             <a href="/#contact">Contact</a>
-            <Link to="/register" className="neo-btn neo-btn-primary" style={{ padding: '0.5rem 1rem' }}>
-              REGISTER NOW ↗
-            </Link>
-            <Link to="/submit-project" className="neo-btn neo-btn-secondary" style={{ padding: '0.5rem 1rem' }}>
+            <Link to="/submit-project" className="neo-btn neo-btn-primary" style={{ padding: '0.5rem 1rem' }}>
               SUBMIT PPT / PROTOTYPE ↗
             </Link>
           </div>

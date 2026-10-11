@@ -11,8 +11,8 @@ export default function Hero() {
   });
 
   useEffect(() => {
-    // Target: 10 October 2026, 23:59:59 (Midnight)
-    const targetDate = new Date('2026-10-10T23:59:59').getTime();
+    // Target: 13 October 2026, 23:59:59 (12:00 AM / Midnight)
+    const targetDate = new Date('2026-10-13T23:59:59').getTime();
 
     const updateTimer = () => {
       const now = new Date().getTime();
@@ -59,10 +59,7 @@ export default function Hero() {
             and compete for exciting prizes and mentorship.
           </p>
           <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
-            <Link to="/register" className="neo-btn neo-btn-primary">
-              REGISTER NOW <ArrowDownRight size={20} />
-            </Link>
-            <Link to="/submit-project" className="neo-btn neo-btn-secondary">
+            <Link to="/submit-project" className="neo-btn neo-btn-primary">
               SUBMIT PPT / PROTOTYPE <ArrowRight size={20} />
             </Link>
             <a href="/#domains" className="neo-btn neo-btn-outline">
@@ -75,7 +72,7 @@ export default function Hero() {
             <h3 style={{ fontSize: '2rem' }}>14 OCTOBER — 15 OCTOBER 2026</h3>
             <h4 style={{ fontSize: '1.5rem', marginBottom: '2rem' }}>24 HOURS PROGRAM</h4>
             <div style={{ marginTop: '3rem', borderTop: '2px solid rgba(0,0,0,0.2)', paddingTop: '1.5rem' }}>
-              <h5 style={{ color: 'var(--text-color)' }}>REGISTRATION CLOSES: 10 OCTOBER (11:59 PM)</h5>
+              <h5 style={{ color: 'var(--text-color)' }}>LAST DATE SUBMISSION OF PPT & PROTOTYPE: 13 OCTOBER (11:59 PM)</h5>
               <div className="countdown">
                 <div className="countdown-block"><span>{timeLeft.days}</span><small>DAYS</small></div>
                 <div className="countdown-block"><span>{timeLeft.hours}</span><small>HOURS</small></div>

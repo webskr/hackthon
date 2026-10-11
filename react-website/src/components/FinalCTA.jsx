@@ -10,12 +10,11 @@ export default function FinalCTA() {
           Form your team, explore the challenge domains and showcase your innovation at Government Polytechnic Arwal.
         </p>
         <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
-          <Link to="/register" className="neo-btn neo-btn-primary">REGISTER NOW ↗</Link>
-          <Link to="/submit-project" className="neo-btn neo-btn-secondary">SUBMIT PPT / PROTOTYPE ↗</Link>
+          <Link to="/submit-project" className="neo-btn neo-btn-primary">SUBMIT PPT / PROTOTYPE ↗</Link>
           <a href="/#domains" className="neo-btn neo-btn-outline">VIEW DOMAINS →</a>
         </div>
         <div style={{ marginTop: '2rem' }}>
-          <span className="neo-badge teal" style={{ fontSize: '1rem', padding: '0.5rem 1rem' }}>REGISTRATION IS OPEN</span>
+          <span className="neo-badge teal" style={{ fontSize: '1rem', padding: '0.5rem 1rem' }}>PPT & PROTOTYPE SUBMISSION OPEN (TILL 13 OCT 11:59 PM)</span>
         </div>
       </div>
     </section>
