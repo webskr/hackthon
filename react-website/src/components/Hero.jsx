@@ -62,6 +62,9 @@ export default function Hero() {
             <Link to="/register" className="neo-btn neo-btn-primary">
               REGISTER NOW <ArrowDownRight size={20} />
             </Link>
+            <Link to="/submit-project" className="neo-btn neo-btn-secondary">
+              SUBMIT PPT / PROTOTYPE <ArrowRight size={20} />
+            </Link>
             <a href="/#domains" className="neo-btn neo-btn-outline">
               EXPLORE 14 DOMAINS <ArrowRight size={20} />
             </a>

@@ -108,9 +108,14 @@ export default function Register() {
             <p style={{ fontSize: '1.1rem', fontWeight: 600, marginBottom: '2rem' }}>
               We are no longer accepting new registrations for INNOVEXA 2026. Thank you for your overwhelming response!
             </p>
-            <button onClick={() => navigate('/')} className="neo-btn neo-btn-primary">
-              RETURN TO HOME
-            </button>
+            <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
+              <button onClick={() => navigate('/submit-project')} className="neo-btn neo-btn-secondary">
+                SUBMIT PPT / PROTOTYPE ↗
+              </button>
+              <button onClick={() => navigate('/')} className="neo-btn neo-btn-primary">
+                RETURN TO HOME
+              </button>
+            </div>
           </div>
         </div>
       </div>

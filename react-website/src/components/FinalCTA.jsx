@@ -11,6 +11,7 @@ export default function FinalCTA() {
         </p>
         <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
           <Link to="/register" className="neo-btn neo-btn-primary">REGISTER NOW ↗</Link>
+          <Link to="/submit-project" className="neo-btn neo-btn-secondary">SUBMIT PPT / PROTOTYPE ↗</Link>
           <a href="/#domains" className="neo-btn neo-btn-outline">VIEW DOMAINS →</a>
         </div>
         <div style={{ marginTop: '2rem' }}>

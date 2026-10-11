@@ -27,6 +27,9 @@ export default function Navbar() {
             <Link to="/register" className="neo-btn neo-btn-primary" style={{ padding: '0.5rem 1rem' }}>
               REGISTER NOW ↗
             </Link>
+            <Link to="/submit-project" className="neo-btn neo-btn-secondary" style={{ padding: '0.5rem 1rem' }}>
+              SUBMIT PPT / PROTOTYPE ↗
+            </Link>
           </div>
           <button 
             className="mobile-menu-btn" 

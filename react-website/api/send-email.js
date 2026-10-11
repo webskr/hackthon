@@ -12,7 +12,7 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
   
-  const { to, subject, html } = req.body;
+  const { to, subject, html, attachments } = req.body;
   const apiKey = process.env.VITE_RESEND_API_KEY; 
 
   if (!apiKey) {
@@ -20,18 +20,24 @@ export default async function handler(req, res) {
   }
 
   try {
+    const payload = {
+      from: 'TECHNOVA 2026 <onboarding@gparwal.webskr.in>', 
+      to: to,
+      subject: subject,
+      html: html
+    };
+
+    if (attachments && Array.isArray(attachments) && attachments.length > 0) {
+      payload.attachments = attachments;
+    }
+
     const response = await fetch('https://api.resend.com/emails', {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${apiKey}`,
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({
-        from: 'TECHNOVA 2026 <onboarding@gparwal.webskr.in>', 
-        to: to,
-        subject: subject,
-        html: html
-      })
+      body: JSON.stringify(payload)
     });
     
     const data = await response.json();
