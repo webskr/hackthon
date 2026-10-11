@@ -22,8 +22,7 @@ export default function SubmitProject() {
   });
 
   const [pptFile, setPptFile] = useState(null);
-  const [photoFile, setPhotoFile] = useState(null);
-  const [photoPreview, setPhotoPreview] = useState(null);
+  const [photoFiles, setPhotoFiles] = useState([]); // Array of { file, preview }
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -42,20 +41,36 @@ export default function SubmitProject() {
     }
   };
 
-  const handlePhotoChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
+  const handlePhotosChange = (e) => {
+    const selectedFiles = Array.from(e.target.files);
+    if (!selectedFiles.length) return;
+
+    if (photoFiles.length + selectedFiles.length > 3) {
+      alert(`Maximum 3 photos allowed. You currently have ${photoFiles.length} photo(s) selected.`);
+      return;
+    }
+
+    selectedFiles.forEach((file) => {
       if (file.size > 10 * 1024 * 1024) {
-        alert("Prototype photo is too large (Maximum 10MB). Please choose a smaller photo.");
+        alert(`Photo "${file.name}" is too large (Maximum 10MB per photo).`);
         return;
       }
-      setPhotoFile(file);
       const reader = new FileReader();
       reader.onloadend = () => {
-        setPhotoPreview(reader.result);
+        setPhotoFiles(prev => {
+          if (prev.length >= 3) return prev;
+          return [...prev, { file, preview: reader.result }];
+        });
       };
       reader.readAsDataURL(file);
-    }
+    });
+
+    // Reset input so user can pick again if needed
+    e.target.value = '';
+  };
+
+  const handleRemovePhoto = (index) => {
+    setPhotoFiles(prev => prev.filter((_, idx) => idx !== index));
   };
 
   // Helper to read File as Base64 string (without the data URL prefix)
@@ -82,8 +97,13 @@ export default function SubmitProject() {
       return;
     }
 
-    if (!photoFile) {
-      setError('Please upload your Hardware Prototype Photo.');
+    if (!photoFiles || photoFiles.length === 0) {
+      setError('Please upload at least 1 photo of your Hardware Prototype (Minimum: 1, Maximum: 3 photos).');
+      return;
+    }
+
+    if (photoFiles.length > 3) {
+      setError('You can upload a maximum of 3 photos for your Hardware Prototype.');
       return;
     }
 
@@ -92,34 +112,53 @@ export default function SubmitProject() {
     try {
       // Convert files to base64 for email attachments
       let pptBase64 = null;
-      let photoBase64 = null;
-
       try {
         pptBase64 = await fileToBase64(pptFile);
       } catch (err) {
         console.warn("Error converting PPT to base64:", err);
       }
 
-      try {
-        photoBase64 = await fileToBase64(photoFile);
-      } catch (err) {
-        console.warn("Error converting photo to base64:", err);
+      // Convert all photo files to base64
+      const photoAttachmentsData = [];
+      for (let i = 0; i < photoFiles.length; i++) {
+        try {
+          const base64Data = await fileToBase64(photoFiles[i].file);
+          photoAttachmentsData.push({
+            file: photoFiles[i].file,
+            base64: base64Data,
+            index: i + 1
+          });
+        } catch (err) {
+          console.warn(`Error converting photo ${i + 1} to base64:`, err);
+        }
       }
+
+      // Helper to generate formatted filename: TeamName_LeaderName_CollegeName_Email
+      const sanitizeName = (str) => (str || '').replace(/[^a-zA-Z0-9]/g, '_').replace(/_+/g, '_').replace(/^_|_$/g, '');
+      const teamPart = sanitizeName(formData.teamName) || 'Team';
+      const leaderPart = sanitizeName(formData.leaderName) || 'Leader';
+      const collegePart = sanitizeName(formData.collegeName) || 'College';
+      const emailPart = (formData.email || '').trim().replace(/[^a-zA-Z0-9@._-]/g, '_');
+      
+      const fileExt = pptFile.name.substring(pptFile.name.lastIndexOf('.')) || '.pdf';
+      const formattedPptName = `${teamPart}_${leaderPart}_${collegePart}_${emailPart}${fileExt}`;
 
       // 1. Prepare attachments for Resend
       const attachments = [];
       if (pptBase64) {
         attachments.push({
-          filename: pptFile.name,
+          filename: formattedPptName,
           content: pptBase64
         });
       }
-      if (photoBase64) {
+
+      photoAttachmentsData.forEach((pItem) => {
+        const photoExt = pItem.file.name.substring(pItem.file.name.lastIndexOf('.')) || '.jpg';
         attachments.push({
-          filename: photoFile.name,
-          content: photoBase64
+          filename: `${teamPart}_${leaderPart}_PrototypePhoto_${pItem.index}${photoExt}`,
+          content: pItem.base64
         });
-      }
+      });
 
       // 2. Save submission record in Firestore
       try {
@@ -132,10 +171,11 @@ export default function SubmitProject() {
           email: formData.email.trim(),
           hardwareNotes: formData.hardwareNotes.trim(),
           backupDriveLink: formData.backupDriveLink.trim(),
-          pptFileName: pptFile.name,
+          pptFileName: formattedPptName,
+          originalPptFileName: pptFile.name,
           pptFileSize: `${(pptFile.size / (1024 * 1024)).toFixed(2)} MB`,
-          photoFileName: photoFile.name,
-          photoFileSize: `${(photoFile.size / (1024 * 1024)).toFixed(2)} MB`,
+          photoCount: photoFiles.length,
+          photoFileNames: photoFiles.map(p => p.file.name),
           submittedAt: serverTimestamp(),
           type: 'PPT_PROTOTYPE_UPLOAD'
         });
@@ -189,7 +229,12 @@ export default function SubmitProject() {
                   📄 <strong>Presentation File:</strong> ${pptFile.name} (${(pptFile.size / (1024 * 1024)).toFixed(2)} MB)
                 </li>
                 <li style="padding: 8px 0; border-bottom: 1px solid #eee;">
-                  📷 <strong>Hardware Prototype Photo:</strong> ${photoFile.name} (${(photoFile.size / (1024 * 1024)).toFixed(2)} MB)
+                  📷 <strong>Hardware Prototype Photos (${photoFiles.length} uploaded):</strong>
+                  <ul style="margin: 5px 0 0; padding-left: 20px;">
+                    ${photoFiles.map((p, idx) => `
+                      <li>Photo ${idx + 1}: ${p.file.name} (${(p.file.size / (1024 * 1024)).toFixed(2)} MB)</li>
+                    `).join('')}
+                  </ul>
                 </li>
                 ${formData.backupDriveLink ? `
                   <li style="padding: 8px 0;">
@@ -254,7 +299,7 @@ export default function SubmitProject() {
             FILES UPLOADED & SENT! 🎉
           </h2>
           <p style={{ margin: '1rem 0 1.5rem', fontWeight: 600, fontSize: '1.05rem', lineHeight: '1.6' }}>
-            Thank you, Team <strong>{formData.teamName}</strong>! Your PPT/PDF and Prototype Photo have been successfully uploaded and sent directly to <strong>gpahackathon@gmail.com</strong>.
+            Thank you, Team <strong>{formData.teamName}</strong>! Your PPT/PDF and {photoFiles.length} Prototype Photo(s) have been successfully uploaded and sent directly to <strong>gpahackathon@gmail.com</strong>.
           </p>
           <div style={{ background: '#f5f5f5', border: '2px solid var(--border-color)', borderRadius: '4px', padding: '1rem', marginBottom: '2rem', textAlign: 'left', fontSize: '0.9rem' }}>
             <div><strong>Leader:</strong> {formData.leaderName}</div>
@@ -263,7 +308,7 @@ export default function SubmitProject() {
             <div><strong>Mobile:</strong> {formData.mobileNumber}</div>
             <div><strong>Email:</strong> {formData.email}</div>
             <div><strong>PPT File:</strong> {pptFile?.name}</div>
-            <div><strong>Photo File:</strong> {photoFile?.name}</div>
+            <div><strong>Prototype Photos:</strong> {photoFiles.map(p => p.file.name).join(', ')} ({photoFiles.length} photo(s))</div>
           </div>
           <button onClick={() => navigate('/')} className="neo-btn neo-btn-primary" style={{ width: '100%' }}>
             RETURN TO HOME
@@ -406,11 +451,41 @@ export default function SubmitProject() {
               </h3>
 
               {/* PPT / PDF File Upload */}
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.65rem' }}>
                 <label style={{ fontWeight: 700, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                   <FileText size={18} color="var(--primary-orange)" />
                   7. Upload PPT or PDF Presentation *
                 </label>
+                
+                {/* File Naming Instruction Box */}
+                <div style={{
+                  background: '#FFF9E6',
+                  border: '2px solid #FFB74D',
+                  borderRadius: '6px',
+                  padding: '0.85rem 1rem',
+                  fontSize: '0.875rem',
+                  lineHeight: '1.5'
+                }}>
+                  <div style={{ fontWeight: 800, color: '#D84315', marginBottom: '0.25rem' }}>
+                    📌 Mandatory File Naming Format:
+                  </div>
+                  <div>
+                    PDF / PPT ka naam is format me hona chahiye (saara ek saath):
+                  </div>
+                  <div style={{ 
+                    background: '#FFFFFF', 
+                    padding: '0.4rem 0.6rem', 
+                    borderRadius: '4px', 
+                    border: '1.5px dashed #FF9800', 
+                    fontFamily: 'monospace', 
+                    fontWeight: 700, 
+                    color: '#0A192F',
+                    margin: '0.35rem 0'
+                  }}>
+                    TeamName_LeaderName_CollegeName_Email.pdf
+                  </div>
+                </div>
+
                 <span style={{ fontSize: '0.825rem', color: '#666' }}>
                   Supported formats: <strong>.pdf, .ppt, .pptx</strong> (Maximum size: 15MB)
                 </span>
@@ -456,63 +531,103 @@ export default function SubmitProject() {
                 </div>
               </div>
 
-              {/* Hardware Prototype Photo Upload */}
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                <label style={{ fontWeight: 700, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                  <ImageIcon size={18} color="var(--secondary-teal)" />
-                  8. Upload Hardware Prototype Photo *
-                </label>
-                <span style={{ fontSize: '0.825rem', color: '#666' }}>
-                  Supported formats: <strong>.jpg, .jpeg, .png, .webp</strong> (Clear photo of your prototype)
-                </span>
-                <div style={{
-                  border: '2px dashed var(--border-color)',
-                  borderRadius: '6px',
-                  padding: '1.25rem',
-                  background: 'white',
-                  textAlign: 'center',
-                  cursor: 'pointer'
-                }}>
-                  <input 
-                    required={!photoFile}
-                    type="file" 
-                    id="photoFileInput"
-                    accept="image/*"
-                    onChange={handlePhotoChange}
-                    style={{ display: 'none' }}
-                  />
-                  <label htmlFor="photoFileInput" style={{ cursor: 'pointer', display: 'block' }}>
-                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem' }}>
-                      {photoPreview ? (
-                        <img 
-                          src={photoPreview} 
-                          alt="Prototype Preview" 
-                          style={{ maxWidth: '180px', maxHeight: '140px', objectFit: 'cover', borderRadius: '4px', border: '2px solid black' }} 
-                        />
-                      ) : (
-                        <ImageIcon size={32} color="#888" />
-                      )}
-                      <span style={{ fontWeight: 700, fontSize: '0.95rem' }}>
-                        {photoFile ? `Selected: ${photoFile.name}` : 'Click to Browse & Upload Photo'}
-                      </span>
-                      {photoFile && (
-                        <span style={{ fontSize: '0.85rem', color: '#666' }}>
-                          Size: {(photoFile.size / (1024 * 1024)).toFixed(2)} MB
-                        </span>
-                      )}
-                    </div>
+              {/* Hardware Prototype Photo Upload (Min 1, Max 3) */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.65rem' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.5rem' }}>
+                  <label style={{ fontWeight: 700, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                    <ImageIcon size={18} color="var(--secondary-teal)" />
+                    8. Upload Hardware Prototype Photos *
                   </label>
-                  {photoFile && (
-                    <button 
-                      type="button" 
-                      onClick={() => { setPhotoFile(null); setPhotoPreview(null); }} 
-                      className="neo-btn" 
-                      style={{ marginTop: '0.75rem', padding: '0.25rem 0.75rem', fontSize: '0.75rem', background: 'var(--status-red)', color: 'white' }}
-                    >
-                      <Trash2 size={14} /> Remove Photo
-                    </button>
-                  )}
+                  <span className="neo-badge yellow" style={{ fontSize: '0.75rem', padding: '0.2rem 0.6rem' }}>
+                    Min: 1 Photo • Max: 3 Photos ({photoFiles.length}/3 Selected)
+                  </span>
                 </div>
+                <span style={{ fontSize: '0.825rem', color: '#666' }}>
+                  Supported formats: <strong>.jpg, .jpeg, .png, .webp</strong> (Upload 1, 2, or up to 3 clear photos of your hardware prototype)
+                </span>
+
+                {/* Upload box (active if less than 3 photos) */}
+                {photoFiles.length < 3 && (
+                  <div style={{
+                    border: '2px dashed var(--border-color)',
+                    borderRadius: '6px',
+                    padding: '1.25rem',
+                    background: 'white',
+                    textAlign: 'center',
+                    cursor: 'pointer'
+                  }}>
+                    <input 
+                      type="file" 
+                      id="photoFileInput"
+                      accept="image/*"
+                      multiple
+                      onChange={handlePhotosChange}
+                      style={{ display: 'none' }}
+                    />
+                    <label htmlFor="photoFileInput" style={{ cursor: 'pointer', display: 'block' }}>
+                      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem' }}>
+                        <ImageIcon size={32} color="#888" />
+                        <span style={{ fontWeight: 700, fontSize: '0.95rem' }}>
+                          {photoFiles.length === 0 ? 'Click to Browse & Upload Prototype Photo(s)' : '+ Add Another Prototype Photo'}
+                        </span>
+                        <span style={{ fontSize: '0.8rem', color: '#666' }}>
+                          You can select multiple photos at once or add one by one (Up to 3 photos).
+                        </span>
+                      </div>
+                    </label>
+                  </div>
+                )}
+
+                {/* Photo Previews List */}
+                {photoFiles.length > 0 && (
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: '1rem', marginTop: '0.5rem' }}>
+                    {photoFiles.map((pItem, idx) => (
+                      <div key={idx} style={{
+                        background: 'white',
+                        border: '2px solid var(--border-color)',
+                        borderRadius: '6px',
+                        padding: '0.75rem',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        position: 'relative'
+                      }}>
+                        <span style={{
+                          position: 'absolute',
+                          top: '6px',
+                          left: '6px',
+                          background: 'var(--text-color)',
+                          color: 'white',
+                          fontSize: '0.7rem',
+                          fontWeight: 800,
+                          padding: '2px 6px',
+                          borderRadius: '3px'
+                        }}>
+                          #{idx + 1}
+                        </span>
+                        <img 
+                          src={pItem.preview} 
+                          alt={`Prototype ${idx + 1}`} 
+                          style={{ width: '100%', height: '110px', objectFit: 'cover', borderRadius: '4px', border: '1px solid #ccc', marginBottom: '0.5rem' }} 
+                        />
+                        <div style={{ fontSize: '0.8rem', fontWeight: 700, width: '100%', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', textAlign: 'center' }} title={pItem.file.name}>
+                          {pItem.file.name}
+                        </div>
+                        <div style={{ fontSize: '0.75rem', color: '#666', marginBottom: '0.5rem' }}>
+                          {(pItem.file.size / (1024 * 1024)).toFixed(2)} MB
+                        </div>
+                        <button 
+                          type="button" 
+                          onClick={() => handleRemovePhoto(idx)} 
+                          className="neo-btn" 
+                          style={{ padding: '0.2rem 0.5rem', fontSize: '0.75rem', background: 'var(--status-red)', color: 'white', width: '100%' }}
+                        >
+                          <Trash2 size={13} /> Remove
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
 
               {/* Prototype Details / Video link (optional backup) */}
@@ -552,7 +667,7 @@ export default function SubmitProject() {
               style={{ marginTop: '1rem', padding: '1rem', width: '100%', fontSize: '1.15rem' }}
             >
               <Upload size={20} />
-              {isSubmitting ? 'UPLOADING & SENDING TO gpahackathon@gmail.com...' : 'UPLOAD & SEND TO gpahackathon@gmail.com'}
+              {isSubmitting ? 'UPLOADING...' : 'UPLOAD'}
             </button>
           </form>
         </div>
