@@ -117,6 +117,50 @@ export default function Admin() {
     }
   };
 
+  const [isSendingMail, setIsSendingMail] = useState(false);
+
+  const getEmailContent = (reg) => {
+    return {
+      subject: 'TECHNOVA 2026 - Registration Approved! Submit PPT & Prototype Details 🚀',
+      html: `
+        <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #1a1a1a; max-width: 600px; margin: 0 auto; border: 2px solid #000; padding: 20px; border-radius: 8px;">
+          <h2 style="color: #FF5722; margin-top: 0;">🎉 Congratulations ${reg.leaderName}!</h2>
+          <p>Your team <strong>${reg.teamName}</strong> has been officially <strong>APPROVED</strong> for <strong>TECHNOVA 2026 Hackathon</strong> organized by Government Polytechnic Arwal (GP Arwal).</p>
+          <p>Domain: <strong>${reg.domain}</strong></p>
+          
+          <hr style="border: 1px dashed #ccc; margin: 20px 0;" />
+          
+          <h3 style="color: #008080;">📌 Important Next Step: PPT & Prototype Submission</h3>
+          <p>All approved teams are required to submit their Project Presentation (PPT/PDF) and Prototype details before the deadline:</p>
+          
+          <div style="background: #FFF3E0; border-left: 4px solid #FF5722; padding: 12px 15px; margin: 15px 0;">
+            <p style="margin: 0; font-weight: bold; color: #d84315;">
+              ⏰ Submission Deadline: 13 October, 12:00 AM (Midnight)
+            </p>
+          </div>
+          
+          <p>Please submit your project details, PPT, and prototype photos using the official submission link below:</p>
+          
+          <div style="text-align: center; margin: 25px 0;">
+            <a href="https://gparwal.webskr.in/submit-project" target="_blank" rel="noopener noreferrer" style="background-color: #008080; color: #ffffff; padding: 12px 24px; font-weight: bold; text-decoration: none; border-radius: 6px; display: inline-block; box-shadow: 3px 3px 0px #000;">
+              👉 Click Here to Submit PPT & Prototype
+            </a>
+          </div>
+          <p style="text-align: center; font-size: 0.85rem; color: #666;">
+            Direct link: <a href="https://gparwal.webskr.in/submit-project" target="_blank" rel="noopener noreferrer">https://gparwal.webskr.in/submit-project</a>
+          </p>
+          
+          <hr style="border: 1px dashed #ccc; margin: 20px 0;" />
+          
+          <p>For updates and queries, visit our official portal: <a href="https://gparwal.webskr.in" target="_blank" rel="noopener noreferrer" style="color: #FF5722; font-weight: bold;">gparwal.webskr.in</a> or contact your event coordinators.</p>
+          
+          <br/>
+          <p style="margin-bottom: 0;">Warm regards,<br/><strong>TECHNOVA 2026 Organizing Committee</strong><br/>Government Polytechnic Arwal</p>
+        </div>
+      `
+    };
+  };
+
   const handleApprove = async () => {
     if (selectedIds.size === 0) return;
     if (RESEND_API_KEY === "YOUR_RESEND_API_KEY") {
@@ -139,6 +183,7 @@ export default function Admin() {
         });
 
         // 2. Send Email via Vercel Backend Proxy (to bypass CORS)
+        const emailContent = getEmailContent(reg);
         const emailResponse = await fetch('/api/send-email', {
           method: 'POST',
           headers: {
@@ -146,16 +191,8 @@ export default function Admin() {
           },
           body: JSON.stringify({
             to: [reg.email],
-            subject: 'TECHNOVA 2026 Hackathon Organize By GP Arwal - Registration Approved! 🎉',
-            html: `
-              <h2>Congratulations ${reg.leaderName}!</h2>
-              <p>Your team <strong>${reg.teamName}</strong> has been officially APPROVED for the TECHNOVA 2026 Hackathon.</p>
-              <p>We are excited to see your innovation in the ${reg.domain} domain.</p>
-              <br/>
-              <p>If you have any query than visit our site <a href="https://gparwal.webskr.in" target="_blank" rel="noopener noreferrer">gparwal.webskr.in</a> and contact co-ordinator.</p>
-              <br/>
-              <p>Regards,<br/>GP Arwal</p>
-            `
+            subject: emailContent.subject,
+            html: emailContent.html
           })
         });
 
@@ -172,6 +209,50 @@ export default function Admin() {
       alert("An error occurred while approving. Note: Sending emails directly from browser using Resend might get blocked by CORS. You may need a backend proxy.");
     } finally {
       setIsApproving(false);
+    }
+  };
+
+  const handleBatchSendMail = async () => {
+    if (selectedIds.size === 0) return;
+
+    if (!window.confirm(`Are you sure you want to send submission instruction emails to ${selectedIds.size} selected team(s)?`)) {
+      return;
+    }
+
+    setIsSendingMail(true);
+    let successCount = 0;
+    try {
+      for (let id of selectedIds) {
+        const reg = registrations.find(r => r.id === id);
+        if (!reg) continue;
+
+        const emailContent = getEmailContent(reg);
+        const emailResponse = await fetch('/api/send-email', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            to: [reg.email],
+            subject: emailContent.subject,
+            html: emailContent.html
+          })
+        });
+
+        if (emailResponse.ok) {
+          successCount++;
+        } else {
+          console.error("Email send failed for:", reg.email);
+        }
+      }
+
+      alert(`Emails sent successfully to ${successCount} selected team(s)!`);
+      setSelectedIds(new Set());
+    } catch (error) {
+      console.error("Batch mail error: ", error);
+      alert("An error occurred while sending emails.");
+    } finally {
+      setIsSendingMail(false);
     }
   };
 
@@ -220,11 +301,12 @@ export default function Admin() {
   };
 
   const handleSendMail = async (reg) => {
-    if (!window.confirm(`Are you sure you want to manually send an approval email to ${reg.email}?`)) {
+    if (!window.confirm(`Are you sure you want to send the PPT/Prototype submission email to ${reg.email}?`)) {
       return;
     }
     
     try {
+      const emailContent = getEmailContent(reg);
       const emailResponse = await fetch('/api/send-email', {
         method: 'POST',
         headers: {
@@ -232,16 +314,8 @@ export default function Admin() {
         },
         body: JSON.stringify({
           to: [reg.email],
-          subject: 'TECHNOVA 2026 Hackathon Organize By GP Arwal - Registration Approved! 🎉',
-          html: `
-            <h2>Congratulations ${reg.leaderName}!</h2>
-            <p>Your team <strong>${reg.teamName}</strong> has been officially APPROVED for the TECHNOVA 2026 Hackathon.</p>
-            <p>We are excited to see your innovation in the ${reg.domain} domain.</p>
-            <br/>
-            <p>If you have any query than visit our site <a href="https://gparwal.webskr.in" target="_blank" rel="noopener noreferrer">gparwal.webskr.in</a> and contact co-ordinator.</p>
-            <br/>
-            <p>Regards,<br/>GP Arwal</p>
-          `
+          subject: emailContent.subject,
+          html: emailContent.html
         })
       });
 
@@ -458,6 +532,15 @@ export default function Admin() {
               style={{ background: 'var(--secondary-teal)', color: 'white' }}
             >
               {isApproving ? 'APPROVING...' : `APPROVE (${selectedIds.size})`}
+            </button>
+            <button
+              onClick={handleBatchSendMail}
+              disabled={isSendingMail || selectedIds.size === 0}
+              className="neo-btn"
+              style={{ background: '#0056b3', color: 'white' }}
+              title="Send PPT/Prototype submission email to selected teams"
+            >
+              {isSendingMail ? 'SENDING...' : `✉ SEND MAIL (${selectedIds.size})`}
             </button>
             <button
               onClick={handleUnapprove}
