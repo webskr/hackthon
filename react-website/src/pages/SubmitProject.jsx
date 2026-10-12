@@ -32,9 +32,27 @@ export default function SubmitProject() {
   const handlePptChange = (e) => {
     const file = e.target.files[0];
     if (file) {
+      // Disallow image files
+      const isImage = file.type.startsWith('image/') || /\.(jpe?g|png|gif|bmp|webp|svg|ico|tiff?)$/i.test(file.name);
+      if (isImage) {
+        alert("Image files are NOT allowed here. Please upload your presentation file (.pdf, .ppt, .pptx, etc.) only.");
+        e.target.value = '';
+        return;
+      }
+
+      // Check presentation / document extensions
+      const validExtensions = ['.pdf', '.ppt', '.pptx', '.pps', '.ppsx', '.odp', '.doc', '.docx'];
+      const fileExt = file.name.substring(file.name.lastIndexOf('.')).toLowerCase();
+      if (!validExtensions.includes(fileExt) && !file.type.includes('presentation') && !file.type.includes('pdf')) {
+        alert("Please upload a valid presentation file (.pdf, .ppt, or .pptx).");
+        e.target.value = '';
+        return;
+      }
+
       // 15MB limit check
       if (file.size > 15 * 1024 * 1024) {
         alert("PPT / PDF file size is too large (Maximum 15MB). Please compress it or use Google Drive link.");
+        e.target.value = '';
         return;
       }
       setPptFile(file);
@@ -45,12 +63,27 @@ export default function SubmitProject() {
     const selectedFiles = Array.from(e.target.files);
     if (!selectedFiles.length) return;
 
-    if (photoFiles.length + selectedFiles.length > 3) {
-      alert(`Maximum 3 photos allowed. You currently have ${photoFiles.length} photo(s) selected.`);
+    // Filter to ensure only image files are allowed
+    const validImages = selectedFiles.filter(file => 
+      file.type.startsWith('image/') || /\.(jpe?g|png|webp|gif|bmp|svg)$/i.test(file.name)
+    );
+
+    if (validImages.length !== selectedFiles.length) {
+      alert("Only image files (.jpg, .jpeg, .png, .webp) are allowed for prototype photos. Document/PDF files cannot be uploaded here.");
+    }
+
+    if (validImages.length === 0) {
+      e.target.value = '';
       return;
     }
 
-    selectedFiles.forEach((file) => {
+    if (photoFiles.length + validImages.length > 3) {
+      alert(`Maximum 3 photos allowed. You currently have ${photoFiles.length} photo(s) selected.`);
+      e.target.value = '';
+      return;
+    }
+
+    validImages.forEach((file) => {
       if (file.size > 10 * 1024 * 1024) {
         alert(`Photo "${file.name}" is too large (Maximum 10MB per photo).`);
         return;
@@ -501,7 +534,7 @@ export default function SubmitProject() {
                     required={!pptFile}
                     type="file" 
                     id="pptFileInput"
-                    accept=".pdf,.ppt,.pptx"
+                    accept=".pdf,.ppt,.pptx,application/pdf,application/vnd.ms-powerpoint,application/vnd.openxmlformats-officedocument.presentationml.presentation"
                     onChange={handlePptChange}
                     style={{ display: 'none' }}
                   />
