@@ -3,15 +3,18 @@ import { useNavigate } from 'react-router-dom';
 import { collection, addDoc, setDoc, doc, serverTimestamp } from 'firebase/firestore';
 import { db } from '../config/firebase';
 import { ArrowLeft, Zap } from 'lucide-react';
+import { usePortalSettings } from '../context/SettingsContext';
 
 export default function Register() {
   const navigate = useNavigate();
+  const { registrationOpen, loadingSettings } = usePortalSettings();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState('');
 
-  // Check if registration is closed
-  const isClosed = new Date().getTime() > new Date('October 11, 2026 23:59:59').getTime();
+  // Dynamic status controlled via Admin Panel
+  const isClosed = !registrationOpen;
+
 
   const [formData, setFormData] = useState({
     teamName: '',
@@ -108,9 +111,14 @@ export default function Register() {
             <p style={{ fontSize: '1.1rem', fontWeight: 600, marginBottom: '2rem' }}>
               We are no longer accepting new registrations for INNOVEXA 2026. Thank you for your overwhelming response!
             </p>
-            <button onClick={() => navigate('/')} className="neo-btn neo-btn-primary">
-              RETURN TO HOME
-            </button>
+            <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
+              <button onClick={() => navigate('/submit-project')} className="neo-btn neo-btn-secondary">
+                SUBMIT PPT / PROTOTYPE ↗
+              </button>
+              <button onClick={() => navigate('/')} className="neo-btn neo-btn-primary">
+                RETURN TO HOME
+              </button>
+            </div>
           </div>
         </div>
       </div>

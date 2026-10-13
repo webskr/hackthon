@@ -14,7 +14,7 @@ export default function Schedule() {
             <div className="step-number">01</div>
           </div>
           <div className="neo-card step-card" style={{ color: 'var(--text-color)' }}>
-            <span className="neo-badge red" style={{ marginBottom: '1rem' }}>10 Oct 2026 (5:00 PM)</span>
+            <span className="neo-badge red" style={{ marginBottom: '1rem' }}>10 Oct 2026 (11:59 PM)</span>
             <h3>Registration Deadline</h3>
             <p>Final deadline for team registration and idea submission.</p>
             <div className="step-number">02</div>

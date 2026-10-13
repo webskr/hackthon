@@ -1,14 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { collection, query, where, getDocs, orderBy, updateDoc, doc, deleteDoc } from 'firebase/firestore';
 import { db } from '../config/firebase';
-import { ArrowLeft, Lock, Users, Eye, EyeOff, CheckCircle } from 'lucide-react';
+import { ArrowLeft, Lock, Users, Eye, EyeOff, CheckCircle, ToggleLeft, ToggleRight, Settings, FileText, UserPlus } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { usePortalSettings } from '../context/SettingsContext';
 
 export default function Admin() {
   const navigate = useNavigate();
+  const { registrationOpen, pptSubmissionOpen, toggleRegistration, togglePptSubmission } = usePortalSettings();
+  const [isUpdatingSettings, setIsUpdatingSettings] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(() => {
     return localStorage.getItem('adminAuth') === 'true';
   });
+
   const [isLoggingIn, setIsLoggingIn] = useState(false);
   const [loginError, setLoginError] = useState('');
 
@@ -20,7 +24,7 @@ export default function Admin() {
   const [loadingRegs, setLoadingRegs] = useState(false);
   const [selectedIds, setSelectedIds] = useState(new Set());
   const [isApproving, setIsApproving] = useState(false);
-  const [isSendingMail, setIsSendingMail] = useState(false);
+  const [isUnapproving, setIsUnapproving] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [selectedRegDetail, setSelectedRegDetail] = useState(null);
 
@@ -117,6 +121,50 @@ export default function Admin() {
     }
   };
 
+  const [isSendingMail, setIsSendingMail] = useState(false);
+
+  const getEmailContent = (reg) => {
+    return {
+      subject: 'TECHNOVA 2026 - Registration Approved! Submit PPT & Prototype Details 🚀',
+      html: `
+        <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #1a1a1a; max-width: 600px; margin: 0 auto; border: 2px solid #000; padding: 20px; border-radius: 8px;">
+          <h2 style="color: #FF5722; margin-top: 0;">🎉 Congratulations ${reg.leaderName}!</h2>
+          <p>Your team <strong>${reg.teamName}</strong> has been officially <strong>APPROVED</strong> for <strong>TECHNOVA 2026 Hackathon</strong> organized by Government Polytechnic Arwal (GP Arwal).</p>
+          <p>Domain: <strong>${reg.domain}</strong></p>
+          
+          <hr style="border: 1px dashed #ccc; margin: 20px 0;" />
+          
+          <h3 style="color: #008080;">📌 Important Next Step: PPT & Prototype Submission</h3>
+          <p>All approved teams are required to submit their Project Presentation (PPT/PDF) and Prototype details before the deadline:</p>
+          
+          <div style="background: #FFF3E0; border-left: 4px solid #FF5722; padding: 12px 15px; margin: 15px 0;">
+            <p style="margin: 0; font-weight: bold; color: #d84315;">
+              ⏰ Submission Deadline: 13 October, 12:00 AM (Midnight)
+            </p>
+          </div>
+          
+          <p>Please submit your project details, PPT, and prototype photos using the official submission link below:</p>
+          
+          <div style="text-align: center; margin: 25px 0;">
+            <a href="https://gparwal.webskr.in/submit-project" target="_blank" rel="noopener noreferrer" style="background-color: #008080; color: #ffffff; padding: 12px 24px; font-weight: bold; text-decoration: none; border-radius: 6px; display: inline-block; box-shadow: 3px 3px 0px #000;">
+              👉 Click Here to Submit PPT & Prototype
+            </a>
+          </div>
+          <p style="text-align: center; font-size: 0.85rem; color: #666;">
+            Direct link: <a href="https://gparwal.webskr.in/submit-project" target="_blank" rel="noopener noreferrer">https://gparwal.webskr.in/submit-project</a>
+          </p>
+          
+          <hr style="border: 1px dashed #ccc; margin: 20px 0;" />
+          
+          <p>For updates and queries, visit our official portal: <a href="https://gparwal.webskr.in" target="_blank" rel="noopener noreferrer" style="color: #FF5722; font-weight: bold;">gparwal.webskr.in</a> or contact your event coordinators.</p>
+          
+          <br/>
+          <p style="margin-bottom: 0;">Warm regards,<br/><strong>TECHNOVA 2026 Organizing Committee</strong><br/>Government Polytechnic Arwal</p>
+        </div>
+      `
+    };
+  };
+
   const handleApprove = async () => {
     if (selectedIds.size === 0) return;
     if (RESEND_API_KEY === "YOUR_RESEND_API_KEY") {
@@ -139,6 +187,7 @@ export default function Admin() {
         });
 
         // 2. Send Email via Vercel Backend Proxy (to bypass CORS)
+        const emailContent = getEmailContent(reg);
         const emailResponse = await fetch('/api/send-email', {
           method: 'POST',
           headers: {
@@ -146,16 +195,8 @@ export default function Admin() {
           },
           body: JSON.stringify({
             to: [reg.email],
-            subject: 'TECHNOVA 2026 Hackathon Organize By GP Arwal - Registration Approved! 🎉',
-            html: `
-              <h2>Congratulations ${reg.leaderName}!</h2>
-              <p>Your team <strong>${reg.teamName}</strong> has been officially APPROVED for the TECHNOVA 2026 Hackathon.</p>
-              <p>We are excited to see your innovation in the ${reg.domain} domain.</p>
-              <br/>
-              <p>If you have any query than visit our site <a href="https://gparwal.webskr.in" target="_blank" rel="noopener noreferrer">gparwal.webskr.in</a> and contact co-ordinator.</p>
-              <br/>
-              <p>Regards,<br/>GP Arwal</p>
-            `
+            subject: emailContent.subject,
+            html: emailContent.html
           })
         });
 
@@ -175,15 +216,21 @@ export default function Admin() {
     }
   };
 
-  const handleSendMail = async () => {
+  const handleBatchSendMail = async () => {
     if (selectedIds.size === 0) return;
-    setIsSendingMail(true);
 
+    if (!window.confirm(`Are you sure you want to send submission instruction emails to ${selectedIds.size} selected team(s)?`)) {
+      return;
+    }
+
+    setIsSendingMail(true);
+    let successCount = 0;
     try {
       for (let id of selectedIds) {
         const reg = registrations.find(r => r.id === id);
         if (!reg) continue;
 
+        const emailContent = getEmailContent(reg);
         const emailResponse = await fetch('/api/send-email', {
           method: 'POST',
           headers: {
@@ -191,31 +238,98 @@ export default function Admin() {
           },
           body: JSON.stringify({
             to: [reg.email],
-            subject: 'TECHNOVA 2026 Hackathon Organize By GP Arwal - Registration Approved! 🎉',
-            html: `
-              <h2>Congratulations ${reg.leaderName}!</h2>
-              <p>Your team <strong>${reg.teamName}</strong> has been officially APPROVED for the TECHNOVA 2026 Hackathon.</p>
-              <p>We are excited to see your innovation in the ${reg.domain} domain.</p>
-              <br/>
-              <p>If you have any query than visit our site <a href="https://gparwal.webskr.in" target="_blank" rel="noopener noreferrer">gparwal.webskr.in</a> and contact co-ordinator.</p>
-              <br/>
-              <p>Regards,<br/>GP Arwal</p>
-            `
+            subject: emailContent.subject,
+            html: emailContent.html
           })
         });
 
-        if (!emailResponse.ok) {
+        if (emailResponse.ok) {
+          successCount++;
+        } else {
           console.error("Email send failed for:", reg.email);
         }
       }
 
-      alert("Emails sent successfully to selected teams!");
+      alert(`Emails sent successfully to ${successCount} selected team(s)!`);
       setSelectedIds(new Set());
     } catch (error) {
-      console.error("Mail error: ", error);
+      console.error("Batch mail error: ", error);
       alert("An error occurred while sending emails.");
     } finally {
       setIsSendingMail(false);
+    }
+  };
+
+  const handleUnapprove = async () => {
+    if (selectedIds.size === 0) return;
+
+    if (!window.confirm(`Are you sure you want to unapprove / move ${selectedIds.size} team(s) back to review?`)) {
+      return;
+    }
+
+    setIsUnapproving(true);
+    try {
+      for (let id of selectedIds) {
+        await updateDoc(doc(db, "registrations", id), {
+          isApproved: false,
+          isViewed: true
+        });
+      }
+      alert("Selected team(s) have been unapproved and moved back to Review!");
+      setSelectedIds(new Set());
+      fetchRegistrations();
+    } catch (error) {
+      console.error("Unapprove error: ", error);
+      alert("An error occurred while unapproving.");
+    } finally {
+      setIsUnapproving(false);
+    }
+  };
+
+  const handleSingleUnapprove = async (reg) => {
+    if (!window.confirm(`Move team "${reg.teamName}" back to review?`)) {
+      return;
+    }
+
+    try {
+      await updateDoc(doc(db, "registrations", reg.id), {
+        isApproved: false,
+        isViewed: true
+      });
+      alert(`Team "${reg.teamName}" moved back to Review!`);
+      fetchRegistrations();
+    } catch (error) {
+      console.error("Unapprove error: ", error);
+      alert("An error occurred while unapproving.");
+    }
+  };
+
+  const handleSendMail = async (reg) => {
+    if (!window.confirm(`Are you sure you want to send the PPT/Prototype submission email to ${reg.email}?`)) {
+      return;
+    }
+    
+    try {
+      const emailContent = getEmailContent(reg);
+      const emailResponse = await fetch('/api/send-email', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          to: [reg.email],
+          subject: emailContent.subject,
+          html: emailContent.html
+        })
+      });
+
+      if (!emailResponse.ok) {
+        throw new Error("Failed to send email");
+      }
+      alert(`Email sent successfully to ${reg.email}!`);
+    } catch (error) {
+      console.error("Email send error: ", error);
+      alert("Failed to send email. Check API or proxy settings.");
     }
   };
 
@@ -424,12 +538,22 @@ export default function Admin() {
               {isApproving ? 'APPROVING...' : `APPROVE (${selectedIds.size})`}
             </button>
             <button
-              onClick={handleSendMail}
+              onClick={handleBatchSendMail}
               disabled={isSendingMail || selectedIds.size === 0}
               className="neo-btn"
               style={{ background: '#0056b3', color: 'white' }}
+              title="Send PPT/Prototype submission email to selected teams"
             >
-              {isSendingMail ? 'SENDING...' : `SEND MAIL (${selectedIds.size})`}
+              {isSendingMail ? 'SENDING...' : `✉ SEND MAIL (${selectedIds.size})`}
+            </button>
+            <button
+              onClick={handleUnapprove}
+              disabled={isUnapproving || selectedIds.size === 0}
+              className="neo-btn"
+              style={{ background: 'var(--primary-orange)', color: 'white' }}
+              title="Move selected teams back to Reviewed"
+            >
+              {isUnapproving ? 'UNAPPROVING...' : `MOVE TO REVIEW (${selectedIds.size})`}
             </button>
             <button
               onClick={handleDelete}
@@ -455,6 +579,130 @@ export default function Admin() {
             >
               LOGOUT
             </button>
+          </div>
+        </div>
+
+        {/* Portal Controls Section */}
+        <div className="neo-card" style={{ background: 'var(--white)', marginBottom: '1.5rem', padding: '1.25rem 1.5rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+              <Settings size={22} color="var(--primary-orange)" />
+              <h2 style={{ margin: 0, fontSize: '1.25rem', fontWeight: 800 }}>
+                PORTAL CONTROLS (LIVE TOGGLE)
+              </h2>
+            </div>
+            <div style={{ fontSize: '0.85rem', color: '#666', fontWeight: 600 }}>
+              Changes take effect immediately across all users and pages in real-time.
+            </div>
+          </div>
+
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+            gap: '1rem',
+            marginTop: '1rem'
+          }}>
+            {/* Registration Control Card */}
+            <div style={{
+              border: '2px solid var(--border-color)',
+              borderRadius: '6px',
+              padding: '1rem 1.25rem',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              background: registrationOpen ? '#F0FDF4' : '#FEF2F2',
+              transition: 'background 0.2s'
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                <UserPlus size={24} color={registrationOpen ? '#16A34A' : '#DC2626'} />
+                <div>
+                  <div style={{ fontWeight: 800, fontSize: '1rem' }}>Team Registration</div>
+                  <div style={{ fontSize: '0.8rem', color: '#666' }}>
+                    Status: <strong style={{ color: registrationOpen ? '#16A34A' : '#DC2626' }}>
+                      {registrationOpen ? 'ONLINE (ACCEPTING ENTRIES)' : 'OFFLINE (CLOSED)'}
+                    </strong>
+                  </div>
+                </div>
+              </div>
+              <button
+                type="button"
+                disabled={isUpdatingSettings}
+                onClick={async () => {
+                  try {
+                    setIsUpdatingSettings(true);
+                    await toggleRegistration(!registrationOpen);
+                  } catch (err) {
+                    alert('Error updating registration status: ' + err.message);
+                  } finally {
+                    setIsUpdatingSettings(false);
+                  }
+                }}
+                className="neo-btn"
+                style={{
+                  padding: '0.4rem 0.9rem',
+                  fontSize: '0.85rem',
+                  background: registrationOpen ? '#DC2626' : '#16A34A',
+                  color: 'white',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.4rem'
+                }}
+              >
+                {registrationOpen ? <ToggleRight size={18} /> : <ToggleLeft size={18} />}
+                {registrationOpen ? 'TURN OFF' : 'TURN ON'}
+              </button>
+            </div>
+
+            {/* PPT / Prototype Submission Control Card */}
+            <div style={{
+              border: '2px solid var(--border-color)',
+              borderRadius: '6px',
+              padding: '1rem 1.25rem',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              background: pptSubmissionOpen ? '#F0FDF4' : '#FEF2F2',
+              transition: 'background 0.2s'
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                <FileText size={24} color={pptSubmissionOpen ? '#16A34A' : '#DC2626'} />
+                <div>
+                  <div style={{ fontWeight: 800, fontSize: '1rem' }}>PPT & Prototype Submission</div>
+                  <div style={{ fontSize: '0.8rem', color: '#666' }}>
+                    Status: <strong style={{ color: pptSubmissionOpen ? '#16A34A' : '#DC2626' }}>
+                      {pptSubmissionOpen ? 'ONLINE (ACCEPTING FILES)' : 'OFFLINE (CLOSED)'}
+                    </strong>
+                  </div>
+                </div>
+              </div>
+              <button
+                type="button"
+                disabled={isUpdatingSettings}
+                onClick={async () => {
+                  try {
+                    setIsUpdatingSettings(true);
+                    await togglePptSubmission(!pptSubmissionOpen);
+                  } catch (err) {
+                    alert('Error updating PPT submission status: ' + err.message);
+                  } finally {
+                    setIsUpdatingSettings(false);
+                  }
+                }}
+                className="neo-btn"
+                style={{
+                  padding: '0.4rem 0.9rem',
+                  fontSize: '0.85rem',
+                  background: pptSubmissionOpen ? '#DC2626' : '#16A34A',
+                  color: 'white',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.4rem'
+                }}
+              >
+                {pptSubmissionOpen ? <ToggleRight size={18} /> : <ToggleLeft size={18} />}
+                {pptSubmissionOpen ? 'TURN OFF' : 'TURN ON'}
+              </button>
+            </div>
           </div>
         </div>
 
@@ -551,7 +799,7 @@ export default function Admin() {
               <tbody>
                 {displayedRegistrations.map((reg, i) => (
                   <tr key={reg.id} style={{ borderBottom: '2px solid var(--border-color)', background: i % 2 === 0 ? '#fafafa' : 'white' }}>
-                    <td style={{ ...tdStyle, textAlign: 'center', minWidth: '120px' }}>
+                    <td style={{ ...tdStyle, textAlign: 'center', minWidth: '130px' }}>
                       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>
                         <input
                           type="checkbox"
@@ -560,9 +808,9 @@ export default function Admin() {
                           onChange={() => toggleSelection(reg.id)}
                         />
                         {reg.isApproved ? (
-                          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.35rem', color: '#008080', fontWeight: 800, fontSize: '0.75rem', background: '#E6F4EA', padding: '0.2rem 0.4rem', borderRadius: '4px', border: '1.5px solid #008080' }}>
+                          <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.25rem', color: '#008080', fontWeight: 800, fontSize: '0.75rem', background: '#E6F4EA', padding: '0.25rem 0.5rem', borderRadius: '4px', border: '1.5px solid #008080' }}>
                             <CheckCircle size={14} color="#008080" /> APPROVED
-                          </div>
+                          </span>
                         ) : (
                           <span 
                             style={{ 
@@ -579,14 +827,36 @@ export default function Admin() {
                         )}
                       </div>
                     </td>
-                    <td style={{ ...tdStyle, textAlign: 'center' }}>
-                      <button 
-                        onClick={() => handleMarkViewed(reg)} 
-                        className="neo-btn" 
-                        style={{ padding: '0.35rem 0.75rem', fontSize: '0.75rem', background: reg.isViewed ? '#F0F0F0' : 'var(--accent-yellow)', color: 'var(--text-color)' }}
-                      >
-                        {reg.isViewed ? 'Viewed' : 'Review ↗'}
-                      </button>
+                    <td style={{ ...tdStyle, textAlign: 'center', minWidth: '150px' }}>
+                      <div style={{ display: 'flex', gap: '0.35rem', justifyContent: 'center', flexWrap: 'wrap' }}>
+                        <button 
+                          onClick={() => handleMarkViewed(reg)} 
+                          className="neo-btn" 
+                          style={{ padding: '0.35rem 0.6rem', fontSize: '0.75rem', background: reg.isViewed ? '#F0F0F0' : 'var(--accent-yellow)', color: 'var(--text-color)' }}
+                        >
+                          {reg.isViewed ? 'Viewed' : 'Review ↗'}
+                        </button>
+                        {reg.isApproved && (
+                          <div style={{ display: 'flex', gap: '0.35rem' }}>
+                            <button
+                              onClick={() => handleSendMail(reg)}
+                              className="neo-btn"
+                              style={{ padding: '0.35rem 0.6rem', fontSize: '0.75rem', background: '#4CAF50', color: 'white' }}
+                              title="Send Email manually"
+                            >
+                              ✉ SEND MAIL
+                            </button>
+                            <button
+                              onClick={() => handleSingleUnapprove(reg)}
+                              className="neo-btn"
+                              style={{ padding: '0.35rem 0.6rem', fontSize: '0.75rem', background: 'var(--primary-orange)', color: 'white' }}
+                              title="Disapprove / Move back to review"
+                            >
+                              ↩ Unapprove
+                            </button>
+                          </div>
+                        )}
+                      </div>
                     </td>
                     <td style={{ ...tdStyle, minWidth: '150px' }}><strong>{reg.teamName}</strong></td>
                     <td style={{ ...tdStyle, minWidth: '70px', textAlign: 'center' }}>{reg.numMembers}</td>

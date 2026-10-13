@@ -10,7 +10,7 @@ export default function FAQ() {
     { q: 'Can we work on an already completed project?', a: 'No completely finished production-ready projects are allowed.' },
     { q: 'Are AI tools like ChatGPT or GitHub Copilot allowed?', a: 'Yes, but participants must understand and explain their code to the judges.' },
     { q: 'Will internet and hardware resources be provided?', a: 'Participants should bring their own laptops and chargers, internet may be provided but keep a backup.' },
-    { q: 'What are the important dates?', a: 'Registration closes on 10 October 2026 (5:00 PM), and the finale is on 14-15 October 2026.' },
+    { q: 'What are the important dates?', a: 'Registration closes on 10 October 2026 (11:59 PM), and the finale is on 14-15 October 2026.' },
     { q: 'How can I contact the coordinators?', a: 'You can use the contact numbers or email listed in the contact section below.' }
   ];
 

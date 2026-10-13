@@ -1,14 +1,16 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Menu, X, Zap } from 'lucide-react';
+import { usePortalSettings } from '../context/SettingsContext';
 
 export default function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { registrationOpen, pptSubmissionOpen } = usePortalSettings();
 
   return (
     <>
       <div className="announcement-bar">
-        Government Polytechnic Arwal, Bihar • Organised by GP Arwal IT Club • Registration Closes: 10 October (5:00 PM)
+        Government Polytechnic Arwal, Bihar • Organised by GP Arwal IT Club • Last Date for Submission of PPT & Prototype: 13 October (11:59 PM)
       </div>
       <nav className="navbar">
         <div className="container">
@@ -24,9 +26,16 @@ export default function Navbar() {
             <a href="/#domains">Domains</a>
             <a href="/#team">Team</a>
             <a href="/#contact">Contact</a>
-            <Link to="/register" className="neo-btn neo-btn-primary" style={{ padding: '0.5rem 1rem' }}>
-              REGISTER NOW ↗
-            </Link>
+            {registrationOpen && (
+              <Link to="/register" className="neo-btn" style={{ padding: '0.5rem 1rem', background: 'var(--secondary-teal)', color: 'white' }}>
+                REGISTER NOW
+              </Link>
+            )}
+            {pptSubmissionOpen && (
+              <Link to="/submit-project" className="neo-btn neo-btn-primary" style={{ padding: '0.5rem 1rem' }}>
+                SUBMIT PPT / PROTOTYPE ↗
+              </Link>
+            )}
           </div>
           <button 
             className="mobile-menu-btn" 
