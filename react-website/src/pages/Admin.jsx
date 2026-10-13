@@ -1,14 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { collection, query, where, getDocs, orderBy, updateDoc, doc, deleteDoc } from 'firebase/firestore';
 import { db } from '../config/firebase';
-import { ArrowLeft, Lock, Users, Eye, EyeOff, CheckCircle } from 'lucide-react';
+import { ArrowLeft, Lock, Users, Eye, EyeOff, CheckCircle, ToggleLeft, ToggleRight, Settings, FileText, UserPlus } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { usePortalSettings } from '../context/SettingsContext';
 
 export default function Admin() {
   const navigate = useNavigate();
+  const { registrationOpen, pptSubmissionOpen, toggleRegistration, togglePptSubmission } = usePortalSettings();
+  const [isUpdatingSettings, setIsUpdatingSettings] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(() => {
     return localStorage.getItem('adminAuth') === 'true';
   });
+
   const [isLoggingIn, setIsLoggingIn] = useState(false);
   const [loginError, setLoginError] = useState('');
 
@@ -575,6 +579,130 @@ export default function Admin() {
             >
               LOGOUT
             </button>
+          </div>
+        </div>
+
+        {/* Portal Controls Section */}
+        <div className="neo-card" style={{ background: 'var(--white)', marginBottom: '1.5rem', padding: '1.25rem 1.5rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+              <Settings size={22} color="var(--primary-orange)" />
+              <h2 style={{ margin: 0, fontSize: '1.25rem', fontWeight: 800 }}>
+                PORTAL CONTROLS (LIVE TOGGLE)
+              </h2>
+            </div>
+            <div style={{ fontSize: '0.85rem', color: '#666', fontWeight: 600 }}>
+              Changes take effect immediately across all users and pages in real-time.
+            </div>
+          </div>
+
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+            gap: '1rem',
+            marginTop: '1rem'
+          }}>
+            {/* Registration Control Card */}
+            <div style={{
+              border: '2px solid var(--border-color)',
+              borderRadius: '6px',
+              padding: '1rem 1.25rem',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              background: registrationOpen ? '#F0FDF4' : '#FEF2F2',
+              transition: 'background 0.2s'
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                <UserPlus size={24} color={registrationOpen ? '#16A34A' : '#DC2626'} />
+                <div>
+                  <div style={{ fontWeight: 800, fontSize: '1rem' }}>Team Registration</div>
+                  <div style={{ fontSize: '0.8rem', color: '#666' }}>
+                    Status: <strong style={{ color: registrationOpen ? '#16A34A' : '#DC2626' }}>
+                      {registrationOpen ? 'ONLINE (ACCEPTING ENTRIES)' : 'OFFLINE (CLOSED)'}
+                    </strong>
+                  </div>
+                </div>
+              </div>
+              <button
+                type="button"
+                disabled={isUpdatingSettings}
+                onClick={async () => {
+                  try {
+                    setIsUpdatingSettings(true);
+                    await toggleRegistration(!registrationOpen);
+                  } catch (err) {
+                    alert('Error updating registration status: ' + err.message);
+                  } finally {
+                    setIsUpdatingSettings(false);
+                  }
+                }}
+                className="neo-btn"
+                style={{
+                  padding: '0.4rem 0.9rem',
+                  fontSize: '0.85rem',
+                  background: registrationOpen ? '#DC2626' : '#16A34A',
+                  color: 'white',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.4rem'
+                }}
+              >
+                {registrationOpen ? <ToggleRight size={18} /> : <ToggleLeft size={18} />}
+                {registrationOpen ? 'TURN OFF' : 'TURN ON'}
+              </button>
+            </div>
+
+            {/* PPT / Prototype Submission Control Card */}
+            <div style={{
+              border: '2px solid var(--border-color)',
+              borderRadius: '6px',
+              padding: '1rem 1.25rem',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              background: pptSubmissionOpen ? '#F0FDF4' : '#FEF2F2',
+              transition: 'background 0.2s'
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                <FileText size={24} color={pptSubmissionOpen ? '#16A34A' : '#DC2626'} />
+                <div>
+                  <div style={{ fontWeight: 800, fontSize: '1rem' }}>PPT & Prototype Submission</div>
+                  <div style={{ fontSize: '0.8rem', color: '#666' }}>
+                    Status: <strong style={{ color: pptSubmissionOpen ? '#16A34A' : '#DC2626' }}>
+                      {pptSubmissionOpen ? 'ONLINE (ACCEPTING FILES)' : 'OFFLINE (CLOSED)'}
+                    </strong>
+                  </div>
+                </div>
+              </div>
+              <button
+                type="button"
+                disabled={isUpdatingSettings}
+                onClick={async () => {
+                  try {
+                    setIsUpdatingSettings(true);
+                    await togglePptSubmission(!pptSubmissionOpen);
+                  } catch (err) {
+                    alert('Error updating PPT submission status: ' + err.message);
+                  } finally {
+                    setIsUpdatingSettings(false);
+                  }
+                }}
+                className="neo-btn"
+                style={{
+                  padding: '0.4rem 0.9rem',
+                  fontSize: '0.85rem',
+                  background: pptSubmissionOpen ? '#DC2626' : '#16A34A',
+                  color: 'white',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.4rem'
+                }}
+              >
+                {pptSubmissionOpen ? <ToggleRight size={18} /> : <ToggleLeft size={18} />}
+                {pptSubmissionOpen ? 'TURN OFF' : 'TURN ON'}
+              </button>
+            </div>
           </div>
         </div>
 

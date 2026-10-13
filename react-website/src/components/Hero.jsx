@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowDownRight, ArrowRight } from 'lucide-react';
+import { usePortalSettings } from '../context/SettingsContext';
 
 export default function Hero() {
+  const { registrationOpen, pptSubmissionOpen } = usePortalSettings();
   const [timeLeft, setTimeLeft] = useState({
     days: '00',
     hours: '00',
@@ -59,9 +61,16 @@ export default function Hero() {
             and compete for exciting prizes and mentorship.
           </p>
           <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
-            <Link to="/submit-project" className="neo-btn neo-btn-primary">
-              SUBMIT PPT / PROTOTYPE <ArrowRight size={20} />
-            </Link>
+            {registrationOpen && (
+              <Link to="/register" className="neo-btn" style={{ background: 'var(--secondary-teal)', color: 'white' }}>
+                REGISTER NOW <ArrowRight size={20} />
+              </Link>
+            )}
+            {pptSubmissionOpen && (
+              <Link to="/submit-project" className="neo-btn neo-btn-primary">
+                SUBMIT PPT / PROTOTYPE <ArrowRight size={20} />
+              </Link>
+            )}
             <a href="/#domains" className="neo-btn neo-btn-outline">
               EXPLORE 14 DOMAINS <ArrowRight size={20} />
             </a>

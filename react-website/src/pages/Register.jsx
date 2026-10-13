@@ -3,15 +3,18 @@ import { useNavigate } from 'react-router-dom';
 import { collection, addDoc, setDoc, doc, serverTimestamp } from 'firebase/firestore';
 import { db } from '../config/firebase';
 import { ArrowLeft, Zap } from 'lucide-react';
+import { usePortalSettings } from '../context/SettingsContext';
 
 export default function Register() {
   const navigate = useNavigate();
+  const { registrationOpen, loadingSettings } = usePortalSettings();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState('');
 
-  // Check if registration is closed
-  const isClosed = true;
+  // Dynamic status controlled via Admin Panel
+  const isClosed = !registrationOpen;
+
 
   const [formData, setFormData] = useState({
     teamName: '',

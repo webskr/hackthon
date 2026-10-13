@@ -3,9 +3,11 @@ import { useNavigate } from 'react-router-dom';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import { db } from '../config/firebase';
 import { ArrowLeft, Upload, FileText, Image as ImageIcon, CheckCircle2, AlertCircle, Trash2 } from 'lucide-react';
+import { usePortalSettings } from '../context/SettingsContext';
 
 export default function SubmitProject() {
   const navigate = useNavigate();
+  const { pptSubmissionOpen } = usePortalSettings();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState('');
@@ -20,6 +22,7 @@ export default function SubmitProject() {
     hardwareNotes: '',
     backupDriveLink: ''
   });
+
 
   const [pptFile, setPptFile] = useState(null);
   const [photoFiles, setPhotoFiles] = useState([]); // Array of { file, preview }
@@ -125,17 +128,14 @@ export default function SubmitProject() {
     e.preventDefault();
     setError('');
 
+    // PPT File (No. 7) is MANDATORY
     if (!pptFile) {
       setError('Please upload your PPT / PDF Presentation file.');
       return;
     }
 
-    if (!photoFiles || photoFiles.length === 0) {
-      setError('Please upload at least 1 photo of your Hardware Prototype (Minimum: 1, Maximum: 3 photos).');
-      return;
-    }
-
-    if (photoFiles.length > 3) {
+    // Hardware Prototype Photos (No. 8) are OPTIONAL (Max 3)
+    if (photoFiles && photoFiles.length > 3) {
       setError('You can upload a maximum of 3 photos for your Hardware Prototype.');
       return;
     }
@@ -151,7 +151,7 @@ export default function SubmitProject() {
         console.warn("Error converting PPT to base64:", err);
       }
 
-      // Convert all photo files to base64
+      // Convert all photo files to base64 (if any uploaded)
       const photoAttachmentsData = [];
       for (let i = 0; i < photoFiles.length; i++) {
         try {
@@ -262,12 +262,14 @@ export default function SubmitProject() {
                   📄 <strong>Presentation File:</strong> ${pptFile.name} (${(pptFile.size / (1024 * 1024)).toFixed(2)} MB)
                 </li>
                 <li style="padding: 8px 0; border-bottom: 1px solid #eee;">
-                  📷 <strong>Hardware Prototype Photos (${photoFiles.length} uploaded):</strong>
-                  <ul style="margin: 5px 0 0; padding-left: 20px;">
-                    ${photoFiles.map((p, idx) => `
-                      <li>Photo ${idx + 1}: ${p.file.name} (${(p.file.size / (1024 * 1024)).toFixed(2)} MB)</li>
-                    `).join('')}
-                  </ul>
+                  📷 <strong>Hardware Prototype Photos:</strong> ${photoFiles.length > 0 ? `${photoFiles.length} uploaded` : '<em>Not uploaded (Optional)</em>'}
+                  ${photoFiles.length > 0 ? `
+                    <ul style="margin: 5px 0 0; padding-left: 20px;">
+                      ${photoFiles.map((p, idx) => `
+                        <li>Photo ${idx + 1}: ${p.file.name} (${(p.file.size / (1024 * 1024)).toFixed(2)} MB)</li>
+                      `).join('')}
+                    </ul>
+                  ` : ''}
                 </li>
                 ${formData.backupDriveLink ? `
                   <li style="padding: 8px 0;">
@@ -332,7 +334,7 @@ export default function SubmitProject() {
             FILES UPLOADED & SENT! 🎉
           </h2>
           <p style={{ margin: '1rem 0 1.5rem', fontWeight: 600, fontSize: '1.05rem', lineHeight: '1.6' }}>
-            Thank you, Team <strong>{formData.teamName}</strong>! Your PPT/PDF and {photoFiles.length} Prototype Photo(s) have been successfully uploaded and sent directly to <strong>gpahackathon@gmail.com</strong>.
+            Thank you, Team <strong>{formData.teamName}</strong>! Your PPT/PDF Presentation{photoFiles.length > 0 ? ` and ${photoFiles.length} Prototype Photo(s)` : ''} have been successfully uploaded and sent directly to <strong>gpahackathon@gmail.com</strong>.
           </p>
           <div style={{ background: '#f5f5f5', border: '2px solid var(--border-color)', borderRadius: '4px', padding: '1rem', marginBottom: '2rem', textAlign: 'left', fontSize: '0.9rem' }}>
             <div><strong>Leader:</strong> {formData.leaderName}</div>
@@ -341,11 +343,31 @@ export default function SubmitProject() {
             <div><strong>Mobile:</strong> {formData.mobileNumber}</div>
             <div><strong>Email:</strong> {formData.email}</div>
             <div><strong>PPT File:</strong> {pptFile?.name}</div>
-            <div><strong>Prototype Photos:</strong> {photoFiles.map(p => p.file.name).join(', ')} ({photoFiles.length} photo(s))</div>
+            <div><strong>Prototype Photos:</strong> {photoFiles.length > 0 ? `${photoFiles.map(p => p.file.name).join(', ')} (${photoFiles.length} photo(s))` : 'Not uploaded (Optional)'}</div>
           </div>
           <button onClick={() => navigate('/')} className="neo-btn neo-btn-primary" style={{ width: '100%' }}>
             RETURN TO HOME
           </button>
+        </div>
+      </div>
+    );
+  }
+
+  if (!pptSubmissionOpen) {
+    return (
+      <div className="app-container" style={{ background: 'var(--bg-color)', minHeight: '100vh', padding: '2rem 0', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <div className="container" style={{ maxWidth: '600px' }}>
+          <div className="neo-card" style={{ background: 'var(--white)', textAlign: 'center', padding: '3rem 2rem' }}>
+            <h1 style={{ color: 'var(--status-red)', marginBottom: '1rem', fontSize: '2.5rem' }}>SUBMISSION CLOSED</h1>
+            <p style={{ fontSize: '1.1rem', fontWeight: 600, marginBottom: '2rem' }}>
+              PPT & Prototype submission is currently closed for INNOVEXA 2026. For queries, contact gpahackathon@gmail.com.
+            </p>
+            <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
+              <button onClick={() => navigate('/')} className="neo-btn neo-btn-primary">
+                RETURN TO HOME
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     );
@@ -564,19 +586,19 @@ export default function SubmitProject() {
                 </div>
               </div>
 
-              {/* Hardware Prototype Photo Upload (Min 1, Max 3) */}
+              {/* Hardware Prototype Photo Upload (Optional, Max 3) */}
               <div style={{ display: 'flex', flexDirection: 'column', gap: '0.65rem' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.5rem' }}>
                   <label style={{ fontWeight: 700, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                     <ImageIcon size={18} color="var(--secondary-teal)" />
-                    8. Upload Hardware Prototype Photos *
+                    8. Upload Hardware Prototype Photos
                   </label>
-                  <span className="neo-badge yellow" style={{ fontSize: '0.75rem', padding: '0.2rem 0.6rem' }}>
-                    Min: 1 Photo • Max: 3 Photos ({photoFiles.length}/3 Selected)
+                  <span className="neo-badge white" style={{ fontSize: '0.75rem', padding: '0.2rem 0.6rem', color: '#666', border: '1px solid #ccc' }}>
+                    Optional • Max: 3 Photos ({photoFiles.length}/3 Selected)
                   </span>
                 </div>
                 <span style={{ fontSize: '0.825rem', color: '#666' }}>
-                  Supported formats: <strong>.jpg, .jpeg, .png, .webp</strong> (Upload 1, 2, or up to 3 clear photos of your hardware prototype)
+                  Supported formats: <strong>.jpg, .jpeg, .png, .webp</strong> (Optional: Upload up to 3 clear photos of your hardware prototype if available)
                 </span>
 
                 {/* Upload box (active if less than 3 photos) */}
