@@ -13,7 +13,7 @@ export default async function handler(req, res) {
   }
   
   const { to, subject, html, attachments } = req.body;
-  const apiKey = process.env.VITE_RESEND_API_KEY; 
+  const apiKey = process.env.VITE_RESEND_API_KEY || process.env.RESEND_API_KEY; 
 
   if (!apiKey) {
     return res.status(500).json({ error: 'Resend API Key is not configured on the server.' });
