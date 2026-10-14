@@ -159,6 +159,14 @@ export default function Team() {
       type: "STUDENT",
       phone: "9122130140",
       avatar: "/Rounak.jpg"
+    },
+    {
+      name: "Prince Kumar",
+      role: "Student Coordinator",
+      dept: "CSE / 2024",
+      type: "STUDENT",
+      phone: "6299990817",
+      avatar: "/prince.jpg"
     }
   ];
 
